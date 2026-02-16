@@ -1,9 +1,10 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CodeWordSelector, { CodeWord } from './CodeWordSelector';
 import { addTimelineEntry } from '../utils/timeline';
+import { loadSettings } from '../utils/settings';
 
 /**
  * HeavinessForm wired to Formspree.
@@ -20,6 +21,12 @@ export default function HeavinessForm() {
   const [selectedCode, setSelectedCode] = useState<CodeWord | null>(null);
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [showConfirmations, setShowConfirmations] = useState<boolean>(true);
+
+  useEffect(() => {
+    const settings = loadSettings();
+    setShowConfirmations(settings.showConfirmations);
+  }, []);
 
   function handleCodeWordChange(cw: CodeWord) {
     // Simply update the chosen code-word; we only log to the
@@ -159,7 +166,11 @@ export default function HeavinessForm() {
         </button>
 
         <div aria-live="polite" aria-atomic="true" className="min-h-[1.25rem]">
-          {status === 'sent' && <span className="text-xl" aria-hidden>💌</span>}
+          {status === 'sent' && showConfirmations && (
+            <span className="text-xl" aria-hidden>
+              💌
+            </span>
+          )}
           {status === 'error' && (
             <span className="text-sm" role="alert" style={{ color: 'var(--muted-violet)' }}>
               Error sending — {errorMessage ?? 'Try again'}

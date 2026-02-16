@@ -1,6 +1,7 @@
 'use client';
 
-import React, { KeyboardEvent } from 'react';
+import React, { KeyboardEvent, useEffect, useState } from 'react';
+import { loadSettings } from '../utils/settings';
 
 export type CodeWord = {
   key: string;
@@ -9,7 +10,7 @@ export type CodeWord = {
   description?: string;
 };
 
-const CODE_WORDS: CodeWord[] = [
+export const CODE_WORDS: CodeWord[] = [
   { key: 'moss', label: 'Moss', weight: 2, description: 'soft, resting' },
   { key: 'velvet', label: 'Velvet', weight: 4, description: 'soft and quiet' },
   { key: 'turtle', label: 'Turtle', weight: 7, description: 'pulling into shell' },
@@ -28,6 +29,14 @@ interface Props {
  * - Visual weights show as small bars.
  */
 export default function CodeWordSelector({ selected = null, onChange }: Props) {
+  const [visibleWords, setVisibleWords] = useState<CodeWord[]>(CODE_WORDS);
+
+  useEffect(() => {
+    // Respect settings: allow hiding specific code-words from the picker.
+    const settings = loadSettings();
+    const hidden = new Set(settings.hiddenCodewords ?? []);
+    setVisibleWords(CODE_WORDS.filter((cw) => !hidden.has(cw.key)));
+  }, []);
   function handleKey(e: KeyboardEvent, cw: CodeWord) {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
@@ -42,7 +51,7 @@ export default function CodeWordSelector({ selected = null, onChange }: Props) {
       </h4>
 
       <div className="grid grid-cols-2 gap-3">
-        {CODE_WORDS.map((cw) => {
+        {visibleWords.map((cw) => {
           const isSelected = selected === cw.key;
           return (
             <button

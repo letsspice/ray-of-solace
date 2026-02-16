@@ -1,6 +1,7 @@
 import './globals.css';
 import React from 'react';
 import Header from '../components/Header';
+import ThemeLoader from '../components/ThemeLoader';
 
 export const metadata = {
   title: 'Ray of Solace',
@@ -15,6 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
+        <ThemeLoader />
         <Header />
         <main className="app-container">{children}</main>
       </body>
