@@ -1,31 +1,81 @@
 'use client';
 
 import React, { useState } from 'react';
+import CodeWordSelector, { CodeWord } from './CodeWordSelector';
 
 /**
- * Minimal, accessible heaviness form for testing.
- * This posts nowhere — it simulates a quick Formspree flow by showing a local confirmation.
- * Keep it quiet: submission shows a single emoji feedback in an aria-live region.
+ * HeavinessForm wired to Formspree.
+ * - Sends JSON to your Formspree endpoint.
+ * - Includes codeword selection, score (1-10), optional note, and timestamp.
+ * - Accessible status messaging using aria-live.
  */
+
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mgedowaj';
 
 export default function HeavinessForm() {
   const [score, setScore] = useState<number>(5);
   const [note, setNote] = useState('');
-  const [sent, setSent] = useState(false);
+  const [selectedCode, setSelectedCode] = useState<CodeWord | null>(null);
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // Simulate send
-    setSent(true);
-    setTimeout(() => setSent(false), 2500);
-    // In production, this is where you'd POST to Formspree or your endpoint.
+    setStatus('sending');
+    setErrorMessage(null);
+
+    const payload = {
+      timestamp: new Date().toISOString(),
+      heaviness: score,
+      note: note || undefined,
+      codeword: selectedCode ? selectedCode.key : undefined,
+      codeword_label: selectedCode ? selectedCode.label : undefined,
+      codeword_weight: selectedCode ? selectedCode.weight : undefined,
+      source: 'ray-of-solace-web',
+    };
+
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        // Attempt to read JSON message
+        let details = '';
+        try {
+          const json = await res.json();
+          details = json?.error || JSON.stringify(json);
+        } catch {
+          details = await res.text();
+        }
+        throw new Error(`Formspree error: ${details || res.statusText}`);
+      }
+
+      setStatus('sent');
+      setNote('');
+      setSelectedCode(null);
+      setScore(5);
+
+      // Auto-reset the "sent" state to idle after a small delay while keeping the
+      // aria-live message visible for screen readers.
+      setTimeout(() => setStatus('idle'), 2500);
+    } catch (err: any) {
+      console.error(err);
+      setStatus('error');
+      setErrorMessage(err?.message ?? 'Unknown error');
+    }
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4" aria-label="Heaviness check-in form">
       <div>
         <label htmlFor="heaviness" className="text-sm font-medium" style={{ color: 'var(--solace-stone-700)' }}>
-          How heavy are you feeling? <span className="text-xs text-solace-stone-500">({score})</span>
+          How heavy are you feeling? <span className="text-xs" style={{ color: 'var(--solace-stone-500)' }}>({score})</span>
         </label>
 
         <div className="mt-2">
@@ -59,17 +109,39 @@ export default function HeavinessForm() {
         />
       </div>
 
+      <div>
+        <label className="text-sm font-medium mb-2 block" style={{ color: 'var(--solace-stone-700)' }}>
+          Pick a code-word (optional)
+        </label>
+
+        <div>
+          <CodeWordSelector
+            selected={selectedCode?.key ?? null}
+            onChange={(cw) => setSelectedCode(cw)}
+          />
+        </div>
+      </div>
+
       <div className="flex items-center gap-3">
         <button
           type="submit"
-          className="px-4 py-2 rounded bg-solace-ray-500 text-white hover:bg-solace-ray-700"
-          style={{ backgroundColor: 'var(--solace-ray-500)' }}
+          disabled={status === 'sending'}
+          className="px-4 py-2 rounded"
+          style={{
+            backgroundColor: 'var(--solace-ray-500)',
+            color: 'white',
+          }}
         >
-          Send quietly
+          {status === 'sending' ? 'Sending…' : 'Send quietly'}
         </button>
 
-        <div aria-live="polite" aria-atomic="true">
-          {sent ? <span className="text-xl">💌</span> : null}
+        <div aria-live="polite" aria-atomic="true" className="min-h-[1.25rem]">
+          {status === 'sent' && <span className="text-xl" aria-hidden>💌</span>}
+          {status === 'error' && (
+            <span className="text-sm" role="alert" style={{ color: 'var(--muted-violet)' }}>
+              Error sending — {errorMessage ?? 'Try again'}
+            </span>
+          )}
         </div>
       </div>
     </form>
