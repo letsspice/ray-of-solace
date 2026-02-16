@@ -1,4 +1,3 @@
-// src/utils/getTodayMessage.ts
 // Small pure utils for finding today's special date (recurring yearly).
 import { SpecialDate, specialDates, defaultDayMessage } from '../data/specialDates';
 
