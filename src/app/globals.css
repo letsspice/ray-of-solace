@@ -57,7 +57,33 @@ body {
 
 /* Layout helper: centered column with breathing room, used by the main app shell. */
 .app-container {
-  @apply max-w-3xl mx-auto px-4 py-6 md:py-8 lg:py-10;
+  /* Base mobile layout: centered column with side padding, expressed without @apply
+   * because Tailwind CSS v4 treats @apply differently. These values mirror
+   * max-w-3xl, mx-auto, px-4, py-6 from the utility system.
+   */
+  max-width: 48rem; /* 768px */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  /* Tablet and up: give the layout a little more vertical breathing room. */
+  .app-container {
+    padding-top: 2rem; /* md:py-8 */
+    padding-bottom: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  /* Desktop: slightly deeper vertical rhythm for the main canvas. */
+  .app-container {
+    padding-top: 2.5rem; /* lg:py-10 */
+    padding-bottom: 2.5rem;
+  }
 }
 
 /* utilities */
@@ -68,5 +94,6 @@ body {
 
 /* Accessible focus style: rely on :focus-visible so pointer users aren't overwhelmed. */
 :focus-visible {
-  @apply outline-none ring-2 ring-solace-ray-500 ring-offset-2 ring-offset-solace-bg;
+  outline: 2px solid var(--solace-ray-500);
+  outline-offset: 2px;
 }

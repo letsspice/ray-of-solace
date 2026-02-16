@@ -1,11 +1,10 @@
 // postcss.config.mjs
-// Minimal PostCSS pipeline: Tailwind for utilities and Autoprefixer for cross-browser safety.
-// Kept intentionally small so it's easy to reason about and extend later.
+// Tailwind CSS v4 uses the dedicated `@tailwindcss/postcss` plugin instead of `tailwindcss` directly.
+// This keeps the setup compatible with Turbopack while still handling necessary PostCSS work under the hood.
 
 const config = {
   plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
+    '@tailwindcss/postcss': {},
   },
 };
 
