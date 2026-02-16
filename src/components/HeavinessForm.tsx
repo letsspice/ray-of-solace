@@ -22,15 +22,10 @@ export default function HeavinessForm() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   function handleCodeWordChange(cw: CodeWord) {
+    // Simply update the chosen code-word; we only log to the
+    // timeline once the full check-in is submitted so a single
+    // entry represents this moment.
     setSelectedCode(cw);
-
-    // Log a lightweight timeline entry whenever a code-word is selected.
-    // This keeps a memory of small emotional signals even if the form
-    // isn&apos;t fully submitted.
-    addTimelineEntry({
-      codeword: cw.key,
-      message: `Code-word chosen: ${cw.label}`,
-    });
   }
 
   async function handleSubmit(e: React.FormEvent) {
