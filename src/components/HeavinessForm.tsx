@@ -2,9 +2,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import CodeWordSelector, { CodeWord } from './CodeWordSelector';
+import CodeWordSelector, { CodeWord, CODE_WORDS } from './CodeWordSelector';
 import { addTimelineEntry } from '../utils/timeline';
-import { loadSettings } from '../utils/settings';
+import { loadSettings, updateSettings } from '../utils/settings';
 
 /**
  * HeavinessForm wired to Formspree.
@@ -26,13 +26,21 @@ export default function HeavinessForm() {
   useEffect(() => {
     const settings = loadSettings();
     setShowConfirmations(settings.showConfirmations);
+     if (settings.activeCodewordKey) {
+       const existing = CODE_WORDS.find((cw) => cw.key === settings.activeCodewordKey);
+       if (existing) {
+         setSelectedCode(existing);
+       }
+     }
   }, []);
 
   function handleCodeWordChange(cw: CodeWord) {
     // Simply update the chosen code-word; we only log to the
     // timeline once the full check-in is submitted so a single
-    // entry represents this moment.
+    // entry represents this moment. We do persist the active
+    // selection so it feels like a default language next time.
     setSelectedCode(cw);
+    updateSettings({ activeCodewordKey: cw.key });
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -88,7 +96,6 @@ export default function HeavinessForm() {
 
       setStatus('sent');
       setNote('');
-      setSelectedCode(null);
       setScore(5);
 
       // Auto-reset the "sent" state to idle after a small delay while keeping the

@@ -9,6 +9,9 @@ export interface AppSettings {
   showConfirmations: boolean;
   hiddenCodewords: string[];
   theme: ThemeMode;
+  // Remember the last active code-word so the UI can feel
+  // continuous across sessions.
+  activeCodewordKey?: string | null;
 }
 
 const SETTINGS_KEY = 'ray-of-solace.settings.v1';
@@ -17,6 +20,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   showConfirmations: true,
   hiddenCodewords: [],
   theme: 'day',
+  activeCodewordKey: null,
 };
 
 function safeParse(json: string | null): Partial<AppSettings> | null {

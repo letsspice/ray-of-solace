@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { addTimelineEntry, loadTimeline, TimelineEntry } from '@/utils/timeline';
+import { CODE_WORDS } from '@/components/CodeWordSelector';
 
 function formatTime(timestamp: string) {
   const date = new Date(timestamp);
@@ -96,6 +97,14 @@ function SpecialDateForm({ onCreated }: { onCreated: () => void }) {
 export default function TimelinePage() {
   const [entries, setEntries] = useState<TimelineEntry[]>([]);
 
+  const codewordByKey = useMemo(() => {
+    const map: Record<string, (typeof CODE_WORDS)[number]> = {};
+    for (const cw of CODE_WORDS) {
+      map[cw.key] = cw;
+    }
+    return map;
+  }, []);
+
   useEffect(() => {
     setEntries(loadTimeline());
   }, []);
@@ -115,10 +124,14 @@ export default function TimelinePage() {
 
     const parts: string[] = [];
     if (latest.heaviness != null) parts.push(`Heaviness ${latest.heaviness}/10`);
-    if (latest.codeword) parts.push(`Code-word: ${latest.codeword}`);
+    if (latest.codeword) {
+      const cw = codewordByKey[latest.codeword];
+      const label = cw?.label ?? latest.codeword;
+      parts.push(`Code-word: ${label}`);
+    }
 
     return parts.join(' · ');
-  }, [latest]);
+  }, [latest, codewordByKey]);
 
   function refresh() {
     setEntries(loadTimeline());
@@ -191,12 +204,26 @@ export default function TimelinePage() {
                   )}
 
                   {entry.codeword && (
-                    <div>
-                      <span className="text-xs uppercase tracking-wide mr-1" style={{ color: 'var(--solace-stone-500)' }}>
-                        Code-word
-                      </span>
-                      <span>{entry.codeword}</span>
-                    </div>
+                    (() => {
+                      const cw = codewordByKey[entry.codeword!];
+                      const label = cw?.label ?? entry.codeword;
+                      const description = cw?.description;
+                      return (
+                        <div>
+                          <div>
+                            <span className="text-xs uppercase tracking-wide mr-1" style={{ color: 'var(--solace-stone-500)' }}>
+                              Code-word
+                            </span>
+                            <span>{label}</span>
+                          </div>
+                          {description && (
+                            <p className="text-xs mt-0.5" style={{ color: 'var(--solace-stone-500)' }}>
+                              {description}
+                            </p>
+                          )}
+                        </div>
+                      );
+                    })()
                   )}
 
                   {entry.message && (
