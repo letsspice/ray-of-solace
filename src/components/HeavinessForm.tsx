@@ -1,7 +1,9 @@
+
 'use client';
 
 import React, { useState } from 'react';
 import CodeWordSelector, { CodeWord } from './CodeWordSelector';
+import { addTimelineEntry } from '../utils/timeline';
 
 /**
  * HeavinessForm wired to Formspree.
@@ -19,18 +21,36 @@ export default function HeavinessForm() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  function handleCodeWordChange(cw: CodeWord) {
+    setSelectedCode(cw);
+
+    // Log a lightweight timeline entry whenever a code-word is selected.
+    // This keeps a memory of small emotional signals even if the form
+    // isn&apos;t fully submitted.
+    addTimelineEntry({
+      codeword: cw.key,
+      message: `Code-word chosen: ${cw.label}`,
+    });
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setStatus('sending');
     setErrorMessage(null);
 
+    const snapshot = {
+      score,
+      note,
+      selectedCode,
+    };
+
     const payload = {
       timestamp: new Date().toISOString(),
-      heaviness: score,
-      note: note || undefined,
-      codeword: selectedCode ? selectedCode.key : undefined,
-      codeword_label: selectedCode ? selectedCode.label : undefined,
-      codeword_weight: selectedCode ? selectedCode.weight : undefined,
+      heaviness: snapshot.score,
+      note: snapshot.note || undefined,
+      codeword: snapshot.selectedCode ? snapshot.selectedCode.key : undefined,
+      codeword_label: snapshot.selectedCode ? snapshot.selectedCode.label : undefined,
+      codeword_weight: snapshot.selectedCode ? snapshot.selectedCode.weight : undefined,
       source: 'ray-of-solace-web',
     };
 
@@ -55,6 +75,14 @@ export default function HeavinessForm() {
         }
         throw new Error(`Formspree error: ${details || res.statusText}`);
       }
+
+      // On successful send, also persist a local timeline entry so the
+      // check-in appears in the in-app memory view.
+      addTimelineEntry({
+        heaviness: snapshot.score,
+        codeword: snapshot.selectedCode ? snapshot.selectedCode.key : undefined,
+        message: snapshot.note || undefined,
+      });
 
       setStatus('sent');
       setNote('');
@@ -117,7 +145,7 @@ export default function HeavinessForm() {
         <div>
           <CodeWordSelector
             selected={selectedCode?.key ?? null}
-            onChange={(cw) => setSelectedCode(cw)}
+            onChange={handleCodeWordChange}
           />
         </div>
       </div>

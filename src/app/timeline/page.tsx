@@ -1,21 +1,218 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect, useMemo, useState } from 'react';
+import { addTimelineEntry, loadTimeline, TimelineEntry } from '@/utils/timeline';
+
+function formatTime(timestamp: string) {
+  const date = new Date(timestamp);
+  return date.toLocaleString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
+/**
+ * Small form for logging a special date or reflective note directly into the timeline.
+ * This complements the automatic entries from check-ins and code-words.
+ */
+function SpecialDateForm({ onCreated }: { onCreated: () => void }) {
+  const [date, setDate] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!date && !message) return;
+
+    const timestamp = date ? new Date(date).toISOString() : new Date().toISOString();
+
+    addTimelineEntry({
+      timestamp,
+      message: message || 'Noted a special moment.',
+    });
+
+    setDate('');
+    setMessage('');
+    onCreated();
+  }
+
+  return (
+    <section className="mt-6 rounded-2xl bg-white/60 p-4 shadow-sm">
+      <h2 className="text-sm font-semibold mb-2" style={{ color: 'var(--solace-stone-900)' }}>
+        Log a special date
+      </h2>
+      <p className="text-xs mb-3" style={{ color: 'var(--solace-stone-500)' }}>
+        Use this when something meaningful happens and you want your own words
+        to appear in the timeline later.
+      </p>
+
+      <form onSubmit={handleSubmit} className="space-y-3">
+        <div className="flex flex-col gap-1">
+          <label htmlFor="special-date" className="text-xs font-medium" style={{ color: 'var(--solace-stone-700)' }}>
+            Date (optional)
+          </label>
+          <input
+            id="special-date"
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="rounded-md border px-2 py-1 text-sm"
+            style={{ borderColor: 'var(--solace-stone-300)', color: 'var(--solace-stone-800)' }}
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label htmlFor="special-message" className="text-xs font-medium" style={{ color: 'var(--solace-stone-700)' }}>
+            Short note
+          </label>
+          <textarea
+            id="special-message"
+            rows={3}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="A small memory, a quiet win, or a heavy moment..."
+            className="rounded-md border px-2 py-1 text-sm"
+            style={{ borderColor: 'var(--solace-stone-300)', color: 'var(--solace-stone-800)' }}
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium"
+          style={{
+            backgroundColor: 'var(--solace-ray-500)',
+            color: 'var(--solace-stone-900)',
+          }}
+        >
+          Save to timeline
+        </button>
+      </form>
+    </section>
+  );
+}
 
 export default function TimelinePage() {
+  const [entries, setEntries] = useState<TimelineEntry[]>([]);
+
+  useEffect(() => {
+    setEntries(loadTimeline());
+  }, []);
+
+  const sortedEntries = useMemo(
+    () =>
+      [...entries].sort(
+        (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
+      ),
+    [entries],
+  );
+
+  const latest = sortedEntries[0];
+
+  const emotionalSnapshot = useMemo(() => {
+    if (!latest) return null;
+
+    const parts: string[] = [];
+    if (latest.heaviness != null) parts.push(`Heaviness ${latest.heaviness}/10`);
+    if (latest.codeword) parts.push(`Code-word: ${latest.codeword}`);
+
+    return parts.join(' · ');
+  }, [latest]);
+
+  function refresh() {
+    setEntries(loadTimeline());
+  }
+
   return (
-    <main className="mt-6">
-      <h1 className="font-serifHeading text-xl mb-4" style={{ color: 'var(--solace-stone-900)' }}>
-        Timeline
-      </h1>
-
-      <section className="rounded-2xl bg-white/60 p-4 shadow-sm">
+    <main className="mt-6 space-y-6">
+      <section>
+        <h1
+          className="font-serifHeading text-xl mb-2"
+          style={{ color: 'var(--solace-stone-900)' }}
+        >
+          Timeline
+        </h1>
         <p className="text-sm" style={{ color: 'var(--solace-stone-700)' }}>
-          This is the Timeline scaffold. Saved check-ins and reflections will appear here.
+          Quiet history of check-ins, code-words, and marked dates. This stays
+          on this device only.
         </p>
-
-        <div className="mt-4 text-xs text-solace-stone-500" style={{ color: 'var(--solace-stone-500)' }}>
-          <p>Planned next: local-only persistence + a private timeline view (no external analytics).</p>
-        </div>
       </section>
+
+      {latest && (
+        <section className="rounded-2xl bg-white/70 p-4 shadow-sm">
+          <h2 className="text-sm font-semibold mb-1" style={{ color: 'var(--solace-stone-900)' }}>
+            Current snapshot
+          </h2>
+          <p className="text-xs mb-1" style={{ color: 'var(--solace-stone-500)' }}>
+            Based on your most recent entry.
+          </p>
+          <p className="text-sm" style={{ color: 'var(--solace-stone-800)' }}>
+            {emotionalSnapshot || 'A gentle, quiet day logged.'}
+          </p>
+          <p className="mt-1 text-xs" style={{ color: 'var(--solace-stone-500)' }}>
+            {formatTime(latest.timestamp)}
+          </p>
+        </section>
+      )}
+
+      <section className="space-y-3">
+        <h2 className="text-sm font-semibold" style={{ color: 'var(--solace-stone-900)' }}>
+          Entries
+        </h2>
+
+        {sortedEntries.length === 0 ? (
+          <p className="text-sm" style={{ color: 'var(--solace-stone-600)' }}>
+            No entries yet. Once you send a heaviness check-in or choose a
+            code-word, they&apos;ll appear here.
+          </p>
+        ) : (
+          <ul className="space-y-3">
+            {sortedEntries.map((entry) => (
+              <li
+                key={entry.id}
+                className="rounded-2xl bg-white/70 p-3 shadow-sm border"
+                style={{ borderColor: 'var(--solace-stone-100)' }}
+              >
+                <div className="flex items-baseline justify-between gap-3">
+                  <div className="text-xs" style={{ color: 'var(--solace-stone-500)' }}>
+                    {formatTime(entry.timestamp)}
+                  </div>
+                </div>
+
+                <div className="mt-1 space-y-1 text-sm" style={{ color: 'var(--solace-stone-800)' }}>
+                  {entry.heaviness != null && (
+                    <div>
+                      <span className="text-xs uppercase tracking-wide mr-1" style={{ color: 'var(--solace-stone-500)' }}>
+                        Heaviness
+                      </span>
+                      <span>{entry.heaviness}/10</span>
+                    </div>
+                  )}
+
+                  {entry.codeword && (
+                    <div>
+                      <span className="text-xs uppercase tracking-wide mr-1" style={{ color: 'var(--solace-stone-500)' }}>
+                        Code-word
+                      </span>
+                      <span>{entry.codeword}</span>
+                    </div>
+                  )}
+
+                  {entry.message && (
+                    <p className="text-sm mt-1" style={{ color: 'var(--solace-stone-800)' }}>
+                      {entry.message}
+                    </p>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <SpecialDateForm onCreated={refresh} />
     </main>
   );
 }
+
