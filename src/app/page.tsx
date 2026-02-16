@@ -50,11 +50,11 @@ export default function Page() {
               <p>
                 Other links:
                 <span className="ml-2">
-                  <a className="underline" href="#">
+                  <a className="underline" href="timeline">
                     Timeline
                   </a>{' '}
                   •{' '}
-                  <a className="underline" href="#">
+                  <a className="underline" href="settings">
                     Settings
                   </a>
                 </span>
