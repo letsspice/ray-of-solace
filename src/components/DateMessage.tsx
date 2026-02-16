@@ -9,71 +9,152 @@ interface Props {
 
 /**
  * Presents the message for "today" — either a special date or the default calm message.
- * Uses semantic markup and accessible structure.
+ * Uses semantic markup and accessible structure with enhanced visual hierarchy.
  */
 export default function DateMessage({ todayMessage }: Props) {
   const { title, subtitle, message, intensity, suggestion, noteForDesigner } = todayMessage;
 
-  // Map intensity to color usage (class names deliberately align with your Tailwind tokens)
-  const intensityMap: Record<string, { bg: string; text: string }> = {
-    soft: { bg: 'bg-solace-ray-100', text: 'text-solace-ray-700' },
-    supportive: { bg: 'bg-solace-ray-100', text: 'text-solace-ray-700' },
-    celebratory: { bg: 'bg-solace-ray-300', text: 'text-solace-ray-900' },
-    heavy: { bg: 'bg-muted-violet', text: 'text-muted-violet' }, // fallback
+  // Enhanced intensity mapping with refined color tokens
+  const intensityMap: Record<string, { 
+    bg: string; 
+    text: string; 
+    icon: string;
+    border: string;
+    gradient: string;
+  }> = {
+    soft: { 
+      bg: 'bg-solace-ray-100/60', 
+      text: 'text-solace-ray-700',
+      icon: '𓆩♡𓆪',
+      border: 'border-solace-ray-200',
+      gradient: 'from-solace-ray-100/20 to-transparent'
+    },
+    supportive: { 
+      bg: 'bg-solace-ray-100/80', 
+      text: 'text-solace-ray-800',
+      icon: '☾',
+      border: 'border-solace-ray-300',
+      gradient: 'from-solace-ray-100/30 to-transparent'
+    },
+    celebratory: { 
+      bg: 'bg-solace-ray-300/70', 
+      text: 'text-solace-ray-900',
+      icon: '𓋴𓍯𓃭𓂧𓏏𓇼',
+      border: 'border-solace-ray-400',
+      gradient: 'from-solace-ray-300/30 to-transparent'
+    },
+    heavy: { 
+      bg: 'bg-muted-violet/10', 
+      text: 'text-muted-violet',
+      icon: '𓋴𓃀𓂧𓏏',
+      border: 'border-muted-violet/20',
+      gradient: 'from-muted-violet/5 to-transparent'
+    },
   };
 
-  const badgeStyle = intensityMap[intensity] ?? intensityMap.soft;
+  const style = intensityMap[intensity] ?? intensityMap.soft;
 
   return (
     <section
       aria-labelledby="today-heading"
-      className="rounded-2xl border border-solace-rocher-100 bg-white/80 p-5 shadow-md smooth-fade transition-transform duration-200 ease-out transform hover:-translate-y-[2px] hover:shadow-lg"
+      className="relative rounded-2xl bg-white/90 backdrop-blur-sm p-6 shadow-md smooth-fade transition-all duration-300 ease-out hover:shadow-lg border border-solace-stone-100/80 overflow-hidden group"
     >
-      <header className="flex items-start justify-between gap-4">
-        <div>
-          <h2
-            id="today-heading"
-            className="text-lg font-semibold tracking-tight"
-            style={{ color: 'var(--solace-stone-900)' }}
-          >
-            {title}
-          </h2>
-          {subtitle ? (
-            <p className="text-xs mt-1" style={{ color: 'var(--solace-stone-700)' }}>
+      {/* Subtle gradient overlay */}
+      <div 
+        className={`absolute inset-0 bg-gradient-to-br ${style.gradient} opacity-50 group-hover:opacity-70 transition-opacity duration-500`}
+        aria-hidden="true"
+      />
+      
+      <header className="relative flex items-start justify-between gap-4">
+        <div className="flex-1">
+          <div className="flex items-center gap-3 mb-1">
+            <h2
+              id="today-heading"
+              className="text-xl font-serifHeading tracking-tight"
+              style={{ color: 'var(--solace-stone-900)' }}
+            >
+              {title}
+            </h2>
+            {intensity === 'celebratory' && (
+              <span className="animate-pulse text-lg" aria-hidden="true">✨</span>
+            )}
+          </div>
+          
+          {subtitle && (
+            <p 
+              className="text-sm font-light italic"
+              style={{ color: 'var(--solace-stone-600)' }}
+            >
               {subtitle}
             </p>
-          ) : null}
+          )}
         </div>
 
-        <div>
-          <span
-            className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${badgeStyle.bg}`}
-            style={{ color: badgeStyle.text }}
-            aria-hidden="true"
+        {/* Refined intensity badge */}
+        <div className="flex-shrink-0">
+          <div
+            className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium ${style.bg} border ${style.border} backdrop-blur-sm`}
+            style={{ color: style.text }}
+            aria-label={`Intensity: ${intensity}`}
           >
-            {intensity === 'celebratory' ? '🎉' : intensity === 'supportive' ? '🤍' : '✨'}
-            <span className="sr-only">intensity</span>
-          </span>
+            <span className="font-serifHeading text-base" aria-hidden="true">
+              {style.icon}
+            </span>
+            <span className="capitalize tracking-wide">{intensity}</span>
+          </div>
         </div>
       </header>
 
-      <div className="mt-3 text-sm leading-relaxed" style={{ color: 'var(--solace-stone-700)' }}>
-        <p>{message}</p>
+      <div className="relative mt-4 space-y-4">
+        {/* Main message with elegant spacing */}
+        <div 
+          className="text-base leading-relaxed font-light"
+          style={{ color: 'var(--solace-stone-800)' }}
+        >
+          <p className="whitespace-pre-wrap">{message}</p>
+        </div>
 
-        {noteForDesigner ? (
-          <blockquote className="mt-3 pl-4 border-l-2" style={{ borderColor: 'var(--solace-rocher-300)' }}>
-            <p className="text-xs italic" style={{ color: 'var(--solace-stone-500)' }}>
+        {/* Designer note with refined styling */}
+        {noteForDesigner && (
+          <blockquote 
+            className="relative pl-5 py-1"
+            style={{ borderLeft: `2px solid var(--solace-rocher-200)` }}
+          >
+            <p 
+              className="text-sm italic font-light"
+              style={{ color: 'var(--solace-stone-600)' }}
+            >
               {noteForDesigner}
             </p>
           </blockquote>
-        ) : null}
+        )}
 
-        {suggestion ? (
-          <p className="mt-3 text-xs" style={{ color: 'var(--solace-stone-500)' }}>
-            {suggestion}
-          </p>
-        ) : null}
+        {/* Suggestion with gentle emphasis */}
+        {suggestion && (
+          <div className="flex items-start gap-2 pt-2">
+            <span 
+              className="text-xs mt-0.5" 
+              style={{ color: 'var(--solace-ray-600)' }}
+              aria-hidden="true"
+            >
+              𓃀
+            </span>
+            <p 
+              className="text-sm font-medium"
+              style={{ color: 'var(--solace-stone-600)' }}
+            >
+              {suggestion}
+            </p>
+          </div>
+        )}
       </div>
+
+      {/* Decorative bottom accent */}
+      <div 
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-20 h-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{ background: 'var(--solace-ray-300)' }}
+        aria-hidden="true"
+      />
     </section>
   );
 }
