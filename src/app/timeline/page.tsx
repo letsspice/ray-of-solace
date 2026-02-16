@@ -81,7 +81,7 @@ function SpecialDateForm({ onCreated }: { onCreated: () => void }) {
 
         <button
           type="submit"
-          className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium"
+          className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium shadow-sm transition-all duration-200 ease-out transform hover:-translate-y-[1px] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-solace-ray-500 focus-visible:ring-offset-2 focus-visible:ring-offset-solace-bg"
           style={{
             backgroundColor: 'var(--solace-ray-500)',
             color: 'var(--solace-stone-900)',
@@ -149,7 +149,7 @@ export default function TimelinePage() {
       </section>
 
       {latest && (
-        <section className="rounded-2xl bg-white/70 p-4 shadow-sm">
+        <section className="rounded-2xl border border-solace-rocher-100 bg-white/80 p-5 shadow-md smooth-fade transition-transform duration-200 ease-out transform hover:-translate-y-[2px] hover:shadow-lg">
           <h2 className="text-sm font-semibold mb-1" style={{ color: 'var(--solace-stone-900)' }}>
             Current snapshot
           </h2>
@@ -176,13 +176,17 @@ export default function TimelinePage() {
             code-word, they&apos;ll appear here.
           </p>
         ) : (
-          <ul className="space-y-3">
+          <ul className="space-y-4 border-l border-dashed border-solace-rocher-100 pl-3">
             {sortedEntries.map((entry) => (
               <li
                 key={entry.id}
-                className="rounded-2xl bg-white/70 p-3 shadow-sm border"
-                style={{ borderColor: 'var(--solace-stone-100)' }}
+                className="relative ml-1 rounded-2xl bg-white/80 p-4 shadow-md border border-solace-rocher-100 smooth-fade transition-transform duration-200 ease-out transform hover:-translate-y-[2px] hover:shadow-lg"
               >
+                <span
+                  className="absolute -left-3 top-3 h-2.5 w-2.5 rounded-full border border-white"
+                  style={{ backgroundColor: 'var(--solace-rocher-500)' }}
+                  aria-hidden
+                />
                 <div className="flex items-baseline justify-between gap-3">
                   <div className="text-xs" style={{ color: 'var(--solace-stone-500)' }}>
                     {formatTime(entry.timestamp)}

@@ -57,7 +57,7 @@ export default function SettingsPage() {
         </p>
       </section>
 
-      <section className="rounded-2xl bg-white/60 p-4 shadow-sm space-y-4">
+      <section className="rounded-2xl bg-white/80 border border-solace-rocher-100 p-5 shadow-md space-y-4 smooth-fade">
         <h2 className="text-sm font-semibold" style={{ color: 'var(--solace-stone-900)' }}>
           Quiet confirmations
         </h2>
@@ -69,7 +69,7 @@ export default function SettingsPage() {
         <button
           type="button"
           onClick={toggleConfirmations}
-          className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium border"
+          className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium border shadow-sm transition-all duration-200 ease-out transform hover:-translate-y-[1px] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-solace-ray-500 focus-visible:ring-offset-2 focus-visible:ring-offset-solace-bg"
           style={{
             borderColor: 'var(--solace-stone-300)',
             backgroundColor: settings.showConfirmations ? 'var(--solace-ray-100)' : 'white',
@@ -80,7 +80,7 @@ export default function SettingsPage() {
         </button>
       </section>
 
-      <section className="rounded-2xl bg-white/60 p-4 shadow-sm space-y-3">
+      <section className="rounded-2xl bg-white/80 border border-solace-rocher-100 p-5 shadow-md space-y-3 smooth-fade">
         <h2 className="text-sm font-semibold" style={{ color: 'var(--solace-stone-900)' }}>
           Timeline safety
         </h2>
@@ -91,7 +91,7 @@ export default function SettingsPage() {
         <button
           type="button"
           onClick={handleClearTimeline}
-          className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium border"
+          className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium border shadow-sm transition-all duration-200 ease-out transform hover:-translate-y-[1px] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-solace-ray-500 focus-visible:ring-offset-2 focus-visible:ring-offset-solace-bg"
           style={{
             borderColor: 'var(--solace-rocher-300)',
             backgroundColor: 'white',
@@ -102,7 +102,7 @@ export default function SettingsPage() {
         </button>
       </section>
 
-      <section className="rounded-2xl bg-white/60 p-4 shadow-sm space-y-3">
+      <section className="rounded-2xl bg-white/80 border border-solace-rocher-100 p-5 shadow-md space-y-3 smooth-fade">
         <h2 className="text-sm font-semibold" style={{ color: 'var(--solace-stone-900)' }}>
           Code-word palette
         </h2>
@@ -128,7 +128,7 @@ export default function SettingsPage() {
                 <button
                   type="button"
                   onClick={() => toggleCodewordVisibility(cw.key)}
-                  className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium border"
+                  className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium border shadow-sm transition-all duration-200 ease-out transform hover:-translate-y-[1px] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-solace-ray-500 focus-visible:ring-offset-2 focus-visible:ring-offset-solace-bg"
                   style={{
                     borderColor: 'var(--solace-stone-300)',
                     backgroundColor: hidden ? 'white' : 'var(--solace-teal-100, #e0f2f1)',
@@ -143,7 +143,7 @@ export default function SettingsPage() {
         </ul>
       </section>
 
-      <section className="rounded-2xl bg-white/60 p-4 shadow-sm space-y-3">
+      <section className="rounded-2xl bg-white/80 border border-solace-rocher-100 p-5 shadow-md space-y-3 smooth-fade">
         <h2 className="text-sm font-semibold" style={{ color: 'var(--solace-stone-900)' }}>
           Theme (optional)
         </h2>
@@ -155,7 +155,7 @@ export default function SettingsPage() {
         <button
           type="button"
           onClick={toggleTheme}
-          className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium border"
+          className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium border shadow-sm transition-all duration-200 ease-out transform hover:-translate-y-[1px] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-solace-ray-500 focus-visible:ring-offset-2 focus-visible:ring-offset-solace-bg"
           style={{
             borderColor: 'var(--solace-stone-300)',
             backgroundColor: settings.theme === 'day' ? 'var(--solace-ray-100)' : 'var(--solace-rocher-700)',

@@ -25,10 +25,17 @@ export default function DateMessage({ todayMessage }: Props) {
   const badgeStyle = intensityMap[intensity] ?? intensityMap.soft;
 
   return (
-    <section aria-labelledby="today-heading" className="bg-white/60 rounded-2xl p-4 shadow-sm smooth-fade">
+    <section
+      aria-labelledby="today-heading"
+      className="rounded-2xl border border-solace-rocher-100 bg-white/80 p-5 shadow-md smooth-fade transition-transform duration-200 ease-out transform hover:-translate-y-[2px] hover:shadow-lg"
+    >
       <header className="flex items-start justify-between gap-4">
         <div>
-          <h2 id="today-heading" className="text-lg font-semibold" style={{ color: 'var(--solace-stone-900)' }}>
+          <h2
+            id="today-heading"
+            className="text-lg font-semibold tracking-tight"
+            style={{ color: 'var(--solace-stone-900)' }}
+          >
             {title}
           </h2>
           {subtitle ? (

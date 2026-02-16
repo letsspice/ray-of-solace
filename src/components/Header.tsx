@@ -14,11 +14,11 @@ export default function Header() {
   ];
 
   return (
-    <header className="w-full py-4">
+    <header className="w-full py-4 border-b border-solace-rocher-100/70 bg-white/80 backdrop-blur-md shadow-sm">
       <div className="app-container flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div
-            className="flex items-center justify-center w-10 h-10 rounded-full"
+            className="flex items-center justify-center w-10 h-10 rounded-full shadow-sm transition-transform duration-200 ease-out hover:-translate-y-[1px] hover:shadow-md"
             style={{ backgroundColor: 'var(--solace-rocher-100)' }}
             aria-hidden="true"
           >
@@ -48,7 +48,7 @@ export default function Header() {
 
         <nav
           aria-label="Primary"
-          className="flex items-center gap-1 rounded-xl bg-white/40 backdrop-blur-sm px-1 py-1 shadow-sm"
+          className="flex items-center gap-1 rounded-xl bg-white/70 backdrop-blur-sm px-1 py-1 shadow-sm border border-solace-stone-100/80 transition-shadow duration-200 ease-out hover:shadow-md"
         >
           {navItems.map(item => {
             const isActive =
@@ -62,13 +62,13 @@ export default function Header() {
                 href={item.href}
                 className={`
                   relative px-3 py-1.5 text-sm rounded-lg
-                  transition-all duration-200
+                  transition-all duration-200 ease-out transform
                   focus-visible:outline-none
-                  focus-visible:ring-2 focus-visible:ring-solace-stone-400
+                  focus-visible:ring-2 focus-visible:ring-solace-ray-500 focus-visible:ring-offset-2 focus-visible:ring-offset-solace-bg
                   ${
                     isActive
                       ? 'bg-white shadow-sm'
-                      : 'hover:bg-white/70'
+                      : 'hover:bg-white/80 hover:-translate-y-[1px] hover:shadow-sm'
                   }
                 `}
                 style={{

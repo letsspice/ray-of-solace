@@ -68,9 +68,14 @@ html {
 
 body {
   font-family: var(--font-ui);
+  /* Soft Stone & Light canvas with a gentle warm glow at the top. */
   background-color: var(--solace-bg);
+  background-image:
+    radial-gradient(circle at 0 0, rgba(254, 249, 195, 0.7), transparent 55%),
+    radial-gradient(circle at 100% 0, rgba(245, 241, 235, 0.95), transparent 55%);
   color: var(--solace-stone-900);
   -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
 }
 
 /* Layout helper: centered column with breathing room, used by the main app shell. */

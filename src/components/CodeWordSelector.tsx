@@ -43,8 +43,8 @@ export default function CodeWordSelector({ selected = null, onChange }: Props) {
   }
 
   return (
-    <div className="p-4 rounded-2xl bg-white/60 shadow-sm">
-      <h4 className="text-sm font-semibold mb-3" style={{ color: 'var(--solace-stone-900)' }}>
+    <div className="p-4 rounded-2xl bg-white/80 border border-solace-rocher-100 shadow-md smooth-fade">
+      <h4 className="text-sm font-semibold mb-3 tracking-tight" style={{ color: 'var(--solace-stone-900)' }}>
         Code-words
       </h4>
 
@@ -59,7 +59,7 @@ export default function CodeWordSelector({ selected = null, onChange }: Props) {
               tabIndex={0}
               onClick={() => onChange?.(cw)}
               onKeyDown={(e) => handleKey(e, cw)}
-              className={`p-3 rounded-md border text-left transition focus:outline-none focus:ring-2 focus:ring-offset-2`}
+              className={`p-3 rounded-md border text-left transition-all duration-200 ease-out transform hover:-translate-y-[1px] hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-solace-ray-500 focus-visible:ring-offset-2 focus-visible:ring-offset-solace-bg`}
               style={{
                 borderColor: isSelected ? 'var(--solace-ray-300)' : 'var(--solace-stone-300)',
                 backgroundColor: isSelected ? 'var(--solace-ray-100)' : 'white',

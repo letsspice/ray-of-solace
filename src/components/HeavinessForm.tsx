@@ -127,7 +127,7 @@ export default function HeavinessForm() {
             max={10}
             value={score}
             onChange={(e) => setScore(Number(e.target.value))}
-            className="w-full"
+            className="w-full accent-solace-ray-500 transition-all duration-200 cursor-pointer"
             aria-valuemin={1}
             aria-valuemax={10}
             aria-valuenow={score}
@@ -145,7 +145,7 @@ export default function HeavinessForm() {
           placeholder="A short note for Rocher..."
           value={note}
           onChange={(e) => setNote(e.target.value)}
-          className="mt-2 w-full rounded-md border p-2"
+          className="mt-2 w-full rounded-lg border px-3 py-2 text-sm transition-all duration-200 focus:border-solace-ray-500 focus:ring-2 focus:ring-solace-ray-500 focus:ring-offset-2 focus:ring-offset-solace-bg"
           style={{ borderColor: 'var(--solace-stone-300)', color: 'var(--solace-stone-700)' }}
         />
       </div>
@@ -167,16 +167,17 @@ export default function HeavinessForm() {
         <button
           type="submit"
           disabled={status === 'sending'}
-          className="px-4 py-2 rounded"
+          className="px-5 py-2.5 rounded-full shadow-md text-sm font-medium transition-all duration-200 ease-out transform hover:-translate-y-[1px] hover:shadow-lg active:translate-y-[1px] disabled:opacity-70 disabled:cursor-not-allowed"
           style={{
-            backgroundColor: 'var(--solace-ray-500)',
+            backgroundImage:
+              'linear-gradient(135deg, var(--solace-ray-500), var(--solace-rocher-500))',
             color: 'white',
           }}
         >
           {status === 'sending' ? 'Sending…' : 'Send quietly'}
         </button>
 
-        <div aria-live="polite" aria-atomic="true" className="min-h-[1.25rem]">
+        <div aria-live="polite" aria-atomic="true" className="min-h-[1.25rem] transition-opacity duration-200">
           {status === 'sent' && showConfirmations && (
             <span className="text-xl" aria-hidden>
               💌

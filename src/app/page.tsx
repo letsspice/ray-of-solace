@@ -19,24 +19,37 @@ export default function Page() {
     <div className="space-y-6">
       <DateMessage todayMessage={todayMessage} />
 
-      <section aria-labelledby="checkin-heading" className="grid gap-6 md:grid-cols-2">
+      <section
+        aria-labelledby="checkin-heading"
+        className="grid gap-6 md:grid-cols-2"
+      >
         <div>
-          <h3 id="checkin-heading" className="text-sm font-semibold mb-3" style={{ color: 'var(--solace-stone-900)' }}>
+          <h3
+            id="checkin-heading"
+            className="text-sm font-semibold mb-3 tracking-tight"
+            style={{ color: 'var(--solace-stone-900)' }}
+          >
             Quick check-in
           </h3>
-          <div className="rounded-2xl bg-white/60 p-4 shadow-sm">
+          <div className="rounded-2xl border border-solace-rocher-100 bg-white/80 p-5 shadow-md smooth-fade transition-transform duration-200 ease-out transform hover:-translate-y-[2px] hover:shadow-lg">
             <HeavinessForm />
           </div>
         </div>
 
         <aside>
-          <h4 className="text-sm font-semibold mb-3" style={{ color: 'var(--solace-stone-900)' }}>
+          <h4
+            className="text-sm font-semibold mb-3 tracking-tight"
+            style={{ color: 'var(--solace-stone-900)' }}
+          >
             Code-words & small signals
           </h4>
 
-          <div className="rounded-2xl bg-white/60 p-4 shadow-sm space-y-3">
+          <div className="rounded-2xl border border-solace-rocher-100 bg-white/80 p-5 shadow-md space-y-3 smooth-fade transition-transform duration-200 ease-out transform hover:-translate-y-[2px] hover:shadow-lg">
             {/* Placeholder: interactive codeword selector to be implemented */}
-            <div className="text-sm text-solace-stone-700" style={{ color: 'var(--solace-stone-700)' }}>
+            <div
+              className="text-sm text-solace-stone-700"
+              style={{ color: 'var(--solace-stone-700)' }}
+            >
               <p>
                 Choose a code-word to send: <strong>Moss</strong>, <strong>Velvet</strong>, <strong>Turtle</strong>,{' '}
                 <strong>Nebula</strong>.
@@ -46,15 +59,24 @@ export default function Page() {
               </p>
             </div>
 
-            <div className="mt-3 border-t pt-3 text-xs text-solace-stone-500" style={{ color: 'var(--solace-stone-500)' }}>
+            <div
+              className="mt-3 border-t border-solace-stone-100 pt-3 text-xs text-solace-stone-500"
+              style={{ color: 'var(--solace-stone-500)' }}
+            >
               <p>
                 Other links:
                 <span className="ml-2">
-                  <a className="underline" href="timeline">
+                  <a
+                    className="underline underline-offset-2 transition-colors duration-200 hover:text-solace-rocher-700"
+                    href="timeline"
+                  >
                     Timeline
                   </a>{' '}
                   •{' '}
-                  <a className="underline" href="settings">
+                  <a
+                    className="underline underline-offset-2 transition-colors duration-200 hover:text-solace-rocher-700"
+                    href="settings"
+                  >
                     Settings
                   </a>
                 </span>
