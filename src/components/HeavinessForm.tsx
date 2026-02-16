@@ -42,14 +42,50 @@ export default function HeavinessForm() {
       selectedCode,
     };
 
+    // Derive a simple emotional summary so the received entry has
+    // more meaning at a glance (e.g. "feeling low", "doing okay").
+    const feelingCategory = snapshot.score <= 3
+      ? 'light'
+      : snapshot.score <= 6
+      ? 'softly heavy'
+      : snapshot.score <= 8
+      ? 'heavy'
+      : 'very heavy';
+
+    const feelingPhrase =
+      feelingCategory === 'light'
+        ? 'feeling okay / light'
+        : feelingCategory === 'softly heavy'
+        ? 'feeling a bit heavy'
+        : feelingCategory === 'heavy'
+        ? 'feeling low'
+        : 'feeling very low';
+
+    const codewordSummary = snapshot.selectedCode
+      ? `${snapshot.selectedCode.label}${snapshot.selectedCode.description ? ` – ${snapshot.selectedCode.description}` : ''}`
+      : undefined;
+
+    const emotionalHeadline = snapshot.selectedCode
+      ? `${feelingPhrase} · code-word: ${snapshot.selectedCode.label}`
+      : feelingPhrase;
+
+    const timestamp = new Date().toISOString();
+
     const payload = {
-      timestamp: new Date().toISOString(),
+      timestamp,
       heaviness: snapshot.score,
       note: snapshot.note || undefined,
       codeword: snapshot.selectedCode ? snapshot.selectedCode.key : undefined,
       codeword_label: snapshot.selectedCode ? snapshot.selectedCode.label : undefined,
       codeword_weight: snapshot.selectedCode ? snapshot.selectedCode.weight : undefined,
       source: 'ray-of-solace-web',
+
+      // Extra fields purely to give you more context when you
+      // receive the entry on your side.
+      subject: `Ray check-in: ${feelingPhrase} (${snapshot.score}/10)`,
+      emotional_headline: emotionalHeadline,
+      emotional_category: feelingCategory,
+      codeword_summary: codewordSummary,
     };
 
     try {
