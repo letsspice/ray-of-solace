@@ -4,6 +4,8 @@
 // Colors are grouped under `solace` so utilities like `bg-solace-bg` carry product meaning, not just hex values.
 
 import type { Config } from 'tailwindcss';
+import forms from '@tailwindcss/forms';
+import typography from '@tailwindcss/typography';
 
 const config: Config = {
   content: [
@@ -77,8 +79,8 @@ const config: Config = {
   },
   plugins: [
     // Forms + Typography keep defaults sane and consistent for inputs and prose.
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
+    forms,
+    typography,
   ],
 };
 

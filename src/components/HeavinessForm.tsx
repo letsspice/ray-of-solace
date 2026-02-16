@@ -101,10 +101,14 @@ export default function HeavinessForm() {
       // Auto-reset the "sent" state to idle after a small delay while keeping the
       // aria-live message visible for screen readers.
       setTimeout(() => setStatus('idle'), 2500);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
       setStatus('error');
-      setErrorMessage(err?.message ?? 'Unknown error');
+      if (err instanceof Error) {
+        setErrorMessage(err.message);
+      } else {
+        setErrorMessage('Unknown error');
+      }
     }
   }
 

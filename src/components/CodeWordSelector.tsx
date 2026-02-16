@@ -1,6 +1,6 @@
 'use client';
 
-import React, { KeyboardEvent, useEffect, useState } from 'react';
+import React, { KeyboardEvent, useState } from 'react';
 import { loadSettings } from '../utils/settings';
 
 export type CodeWord = {
@@ -29,14 +29,12 @@ interface Props {
  * - Visual weights show as small bars.
  */
 export default function CodeWordSelector({ selected = null, onChange }: Props) {
-  const [visibleWords, setVisibleWords] = useState<CodeWord[]>(CODE_WORDS);
-
-  useEffect(() => {
+  const [visibleWords] = useState<CodeWord[]>(() => {
     // Respect settings: allow hiding specific code-words from the picker.
     const settings = loadSettings();
     const hidden = new Set(settings.hiddenCodewords ?? []);
-    setVisibleWords(CODE_WORDS.filter((cw) => !hidden.has(cw.key)));
-  }, []);
+    return CODE_WORDS.filter((cw) => !hidden.has(cw.key));
+  });
   function handleKey(e: KeyboardEvent, cw: CodeWord) {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();

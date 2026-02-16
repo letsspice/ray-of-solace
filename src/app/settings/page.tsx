@@ -1,18 +1,17 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { AppSettings, DEFAULT_SETTINGS, updateSettings, loadSettings, applyTheme } from '@/utils/settings';
 import { clearTimeline } from '@/utils/timeline';
 import { CODE_WORDS } from '@/components/CodeWordSelector';
 
 export default function SettingsPage() {
-  const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
-
-  useEffect(() => {
+  const [settings, setSettings] = useState<AppSettings>(() => {
+    // Client-only: safe to read from localStorage and apply the theme
     const stored = loadSettings();
-    setSettings(stored);
     applyTheme(stored.theme);
-  }, []);
+    return stored;
+  });
 
   function toggleConfirmations() {
     const next = updateSettings({ showConfirmations: !settings.showConfirmations });

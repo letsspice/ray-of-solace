@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { addTimelineEntry, loadTimeline, TimelineEntry } from '@/utils/timeline';
 import { CODE_WORDS } from '@/components/CodeWordSelector';
 
@@ -95,7 +95,7 @@ function SpecialDateForm({ onCreated }: { onCreated: () => void }) {
 }
 
 export default function TimelinePage() {
-  const [entries, setEntries] = useState<TimelineEntry[]>([]);
+  const [entries, setEntries] = useState<TimelineEntry[]>(() => loadTimeline());
 
   const codewordByKey = useMemo(() => {
     const map: Record<string, (typeof CODE_WORDS)[number]> = {};
@@ -103,10 +103,6 @@ export default function TimelinePage() {
       map[cw.key] = cw;
     }
     return map;
-  }, []);
-
-  useEffect(() => {
-    setEntries(loadTimeline());
   }, []);
 
   const sortedEntries = useMemo(
