@@ -43,6 +43,24 @@
   --font-serif-heading: "Instrument Serif", "Merriweather", Georgia, serif;
 }
 
+/* Night variation: keeps the same emotional language but deepens the canvas. */
+:root[data-theme="night"] {
+  --solace-bg: #020617;
+  --solace-stone-100: #1f2937;
+  --solace-stone-300: #4b5563;
+  --solace-stone-500: #9ca3af;
+  --solace-stone-700: #e5e7eb;
+  --solace-stone-900: #f9fafb;
+
+  --solace-rocher-100: #111827;
+  --solace-rocher-300: #1f2937;
+  --solace-rocher-500: #374151;
+  --solace-rocher-700: #4b5563;
+  --solace-rocher-900: #020617;
+
+  --muted-violet: #a78bfa;
+}
+
 html {
   /* Base size for a calm, readable typographic scale. */
   font-size: 16px;
@@ -50,9 +68,14 @@ html {
 
 body {
   font-family: var(--font-ui);
+  /* Soft Stone & Light canvas with a gentle warm glow at the top. */
   background-color: var(--solace-bg);
+  background-image:
+    radial-gradient(circle at 0 0, rgba(254, 249, 195, 0.7), transparent 55%),
+    radial-gradient(circle at 100% 0, rgba(245, 241, 235, 0.95), transparent 55%);
   color: var(--solace-stone-900);
   -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
 }
 
 /* Layout helper: centered column with breathing room, used by the main app shell. */
