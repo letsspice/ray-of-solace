@@ -164,3 +164,9 @@ ray-of-solace is not about productivity. It is about presence.
 
 A small digital space that says:
 > “I see you. Take your time.”
+
+---
+
+## Tailwind design sandbox
+
+The Tailwind design system lives in tailwind.config.ts, with global Stone & Light tokens in src/app/globals.css and the interactive TestScreen playground in src/components/TestScreen.tsx. To explore it locally, install styling deps and plugins with `pnpm add -D tailwindcss postcss autoprefixer @tailwindcss/forms @tailwindcss/typography`, run `pnpm tailwindcss init -p` if you haven’t already, then start the app with `pnpm dev`.
