@@ -57,7 +57,7 @@ export default function DateMessage({ todayMessage }: Props) {
   return (
     <section
       aria-labelledby="today-heading"
-      className="relative rounded-2xl bg-white/90 backdrop-blur-sm p-6 shadow-md smooth-fade transition-all duration-300 ease-out hover:shadow-lg border border-solace-stone-100/80 overflow-hidden group"
+      className="relative rounded-2xl bg-white/92 backdrop-blur-sm p-5 shadow-md smooth-fade transition-all duration-300 ease-out hover:shadow-lg border border-solace-stone-100/80 overflow-hidden group md:p-6"
     >
       {/* Subtle gradient overlay */}
       <div 
@@ -65,12 +65,12 @@ export default function DateMessage({ todayMessage }: Props) {
         aria-hidden="true"
       />
       
-      <header className="relative flex items-start justify-between gap-4">
+      <header className="relative flex flex-wrap items-start justify-between gap-3 md:flex-nowrap md:gap-4">
         <div className="flex-1">
-          <div className="flex items-center gap-3 mb-1">
+          <div className="mb-1 flex items-center gap-2.5">
             <h2
               id="today-heading"
-              className="text-xl font-serifHeading tracking-tight"
+              className="text-xl font-serifHeading tracking-tight md:text-[1.4rem]"
               style={{ color: 'var(--solace-stone-900)' }}
             >
               {title}
@@ -93,7 +93,7 @@ export default function DateMessage({ todayMessage }: Props) {
         {/* Refined intensity badge */}
         <div className="flex-shrink-0">
           <div
-            className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium ${style.bg} border ${style.border} backdrop-blur-sm`}
+            className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium ${style.bg} ${style.border} backdrop-blur-sm md:px-4 md:py-1.5 md:text-sm`}
             style={{ color: style.text }}
             aria-label={`Intensity: ${intensity}`}
           >
@@ -105,10 +105,10 @@ export default function DateMessage({ todayMessage }: Props) {
         </div>
       </header>
 
-      <div className="relative mt-4 space-y-4">
+      <div className="relative mt-4 space-y-3.5">
         {/* Main message with elegant spacing */}
         <div 
-          className="text-base leading-relaxed font-light"
+          className="text-[0.98rem] leading-relaxed font-light"
           style={{ color: 'var(--solace-stone-800)' }}
         >
           <p className="whitespace-pre-wrap">{message}</p>

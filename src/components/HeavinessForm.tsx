@@ -142,7 +142,7 @@ export default function HeavinessForm() {
   return (
     <form 
       onSubmit={handleSubmit} 
-      className="space-y-6 p-6 rounded-2xl bg-white/90 backdrop-blur-sm border border-solace-stone-100/80 shadow-md smooth-fade"
+      className="space-y-5 rounded-2xl border border-solace-stone-100/80 bg-white/92 p-5 shadow-sm smooth-fade md:p-6"
       aria-label="Heaviness check-in form"
     >
       {/* Score Section with Visual Indicator */}
@@ -268,11 +268,11 @@ export default function HeavinessForm() {
       </div>
 
       {/* Submit Section with Refined Feedback */}
-      <div className="flex items-center gap-4 pt-2">
+      <div className="flex flex-wrap items-center gap-3 pt-1.5">
         <button
           type="submit"
           disabled={status === 'sending'}
-          className="group relative px-6 py-3 rounded-full text-sm font-medium transition-all duration-300
+          className="group relative rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300
                      hover:shadow-lg active:shadow-md disabled:opacity-70 disabled:cursor-not-allowed
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-solace-ray-500 
                      focus-visible:ring-offset-2 focus-visible:ring-offset-solace-bg"

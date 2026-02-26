@@ -172,7 +172,7 @@ export default function TimelinePage() {
   const getMoodIndicator = (heaviness?: number) => {
     if (!heaviness) return null;
     if (heaviness <= 3) return { symbol: '𓆉', color: 'var(--solace-ray-500)' };
-    if (heaviness <= 6) return { symbol: '𓃠', color: 'var(--solace-ray-600)' };
+    if (heaviness <= 6) return { symbol: '𓃠', color: 'var(--solace-ray-700)' };
     if (heaviness <= 8) return { symbol: '𓆣', color: 'var(--solace-rocher-500)' };
     return { symbol: '𓃀', color: 'var(--muted-violet)' };
   };
@@ -182,7 +182,7 @@ export default function TimelinePage() {
   }
 
   return (
-    <main className="mt-8 space-y-8 pb-12">
+    <main className="space-y-6 pb-10 lg:space-y-7">
       {/* Header with poetic touch */}
       <section className="relative">
         <div className="flex items-start justify-between">
@@ -218,7 +218,7 @@ export default function TimelinePage() {
 
       {/* Current Snapshot - Enhanced */}
       {latest && (
-        <section className="group relative rounded-2xl bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-sm p-6 shadow-md border border-solace-stone-100/80 smooth-fade hover:shadow-lg transition-all duration-300">
+        <section className="group relative rounded-2xl border border-solace-stone-100/80 bg-gradient-to-br from-white/90 to-white/75 p-5 shadow-md backdrop-blur-sm smooth-fade transition-all duration-300 hover:shadow-lg md:p-6">
           {/* Decorative corner element */}
           <div 
             className="absolute top-0 right-0 w-24 h-24 rounded-tr-2xl opacity-5 pointer-events-none"
@@ -317,7 +317,7 @@ export default function TimelinePage() {
             />
 
             <ul className="space-y-4 relative">
-              {sortedEntries.map((entry, index) => {
+              {sortedEntries.map((entry) => {
                 const mood = getMoodIndicator(entry.heaviness);
                 const cw = entry.codeword ? codewordByKey[entry.codeword] : null;
                 
@@ -337,7 +337,7 @@ export default function TimelinePage() {
                     />
                     
                     {/* Entry card */}
-                    <div className="rounded-xl bg-white/90 backdrop-blur-sm p-5 shadow-sm border border-solace-stone-100/80 smooth-fade transition-all duration-300 group-hover:shadow-md group-hover:-translate-y-0.5">
+                    <div className="rounded-xl border border-solace-stone-100/80 bg-white/92 p-5 shadow-sm backdrop-blur-sm smooth-fade transition-all duration-300 group-hover:-translate-y-0.5 group-hover:shadow-md">
                       {/* Header with time */}
                       <div className="flex items-center justify-between mb-3">
                         <time 
@@ -351,9 +351,9 @@ export default function TimelinePage() {
                           <span 
                             className="text-[0.6rem] px-2 py-0.5 rounded-full"
                             style={{ 
-                              backgroundColor: 'var(--solace-ray-50)',
+                              backgroundColor: 'var(--solace-ray-100)',
                               color: mood?.color || 'var(--solace-ray-700)',
-                              border: `1px solid ${mood?.color || 'var(--solace-ray-200)'}`
+                              border: `1px solid ${mood?.color || 'var(--solace-ray-300)'}`
                             }}
                           >
                             {entry.heaviness}/10
@@ -368,9 +368,9 @@ export default function TimelinePage() {
                             <span 
                               className="text-xs px-2 py-0.5 rounded-md"
                               style={{ 
-                                backgroundColor: 'var(--solace-ray-50)',
+                                backgroundColor: 'var(--solace-ray-100)',
                                 color: 'var(--solace-ray-800)',
-                                border: '1px solid var(--solace-ray-200)'
+                                border: '1px solid var(--solace-ray-300)'
                               }}
                             >
                               {cw.label}

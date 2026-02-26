@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { AppSettings, DEFAULT_SETTINGS, updateSettings, loadSettings, applyTheme } from '@/utils/settings';
+import { AppSettings, updateSettings, loadSettings, applyTheme } from '@/utils/settings';
 import { clearTimeline } from '@/utils/timeline';
 import { CODE_WORDS } from '@/components/CodeWordSelector';
 
@@ -42,7 +42,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <main className="mt-8 space-y-8 pb-12">
+    <main className="space-y-6 pb-10 lg:space-y-7">
       {/* Header Section with Decorative Element */}
       <section className="relative">
         <div className="flex items-start justify-between">
@@ -77,9 +77,9 @@ export default function SettingsPage() {
       </section>
 
       {/* Settings Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:gap-6">
         {/* Quiet Confirmations Card */}
-        <section className="group rounded-2xl bg-white/90 backdrop-blur-sm border border-solace-stone-100/80 p-6 shadow-md hover:shadow-lg transition-all duration-300 smooth-fade">
+        <section className="group rounded-2xl border border-solace-stone-100/80 bg-white/90 p-5 shadow-md backdrop-blur-sm smooth-fade transition-all duration-300 hover:shadow-lg md:p-6">
           <div className="flex items-start gap-4">
             <div 
               className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0"
@@ -139,7 +139,7 @@ export default function SettingsPage() {
         </section>
 
         {/* Theme Card */}
-        <section className="group rounded-2xl bg-white/90 backdrop-blur-sm border border-solace-stone-100/80 p-6 shadow-md hover:shadow-lg transition-all duration-300 smooth-fade">
+        <section className="group rounded-2xl border border-solace-stone-100/80 bg-white/90 p-5 shadow-md backdrop-blur-sm smooth-fade transition-all duration-300 hover:shadow-lg md:p-6">
           <div className="flex items-start gap-4">
             <div 
               className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0"
@@ -192,7 +192,7 @@ export default function SettingsPage() {
         </section>
 
         {/* Timeline Safety Card */}
-        <section className="group rounded-2xl bg-white/90 backdrop-blur-sm border border-solace-stone-100/80 p-6 shadow-md hover:shadow-lg transition-all duration-300 smooth-fade">
+        <section className="group rounded-2xl border border-solace-stone-100/80 bg-white/90 p-5 shadow-md backdrop-blur-sm smooth-fade transition-all duration-300 hover:shadow-lg md:p-6">
           <div className="flex items-start gap-4">
             <div 
               className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0"
@@ -229,7 +229,7 @@ export default function SettingsPage() {
         </section>
 
         {/* Code-word Palette Card - Spans Full Width on Desktop */}
-        <section className="md:col-span-2 rounded-2xl bg-white/90 backdrop-blur-sm border border-solace-stone-100/80 p-6 shadow-md hover:shadow-lg transition-all duration-300 smooth-fade">
+        <section className="rounded-2xl border border-solace-stone-100/80 bg-white/90 p-5 shadow-md backdrop-blur-sm smooth-fade transition-all duration-300 hover:shadow-lg md:col-span-2 md:p-6">
           <div className="flex items-start gap-4 mb-6">
             <div 
               className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0"

@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import DateMessage from '../components/DateMessage';
 import HeavinessForm from '../components/HeavinessForm';
 import { getTodayMessage } from '../utils/getTodayMessage';
@@ -16,12 +17,14 @@ export default function Page() {
   const todayMessage = getTodayMessage();
 
   return (
-    <div className="space-y-8">
-      <DateMessage todayMessage={todayMessage} />
+    <div className="space-y-6 lg:space-y-8">
+      <section className="rounded-2xl border border-solace-stone-100/80 bg-white/65 p-4 shadow-sm backdrop-blur-sm lg:p-5">
+        <DateMessage todayMessage={todayMessage} />
+      </section>
 
       <section
         aria-labelledby="checkin-heading"
-        className="grid gap-6 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] items-start"
+        className="grid gap-5 lg:gap-6 xl:grid-cols-[minmax(0,1.28fr)_minmax(0,1fr)] items-start"
       >
         <div>
           <h3
@@ -37,7 +40,7 @@ export default function Page() {
           >
             A single, quiet moment to say how you&apos;re doing.
           </p>
-          <div className="rounded-2xl border border-solace-rocher-100 bg-white/80 p-5 shadow-md smooth-fade transition-transform duration-200 ease-out transform hover:-translate-y-[2px] hover:shadow-lg">
+          <div className="rounded-2xl border border-solace-rocher-100/80 bg-white/85 p-5 shadow-md smooth-fade transition-transform duration-200 ease-out hover:-translate-y-[1px] hover:shadow-lg">
             <HeavinessForm />
           </div>
         </div>
@@ -57,7 +60,7 @@ export default function Page() {
             needing to explain everything.
           </p>
 
-          <div className="rounded-2xl border border-solace-rocher-100 bg-white/80 p-5 shadow-md space-y-3 smooth-fade transition-transform duration-200 ease-out transform hover:-translate-y-[2px] hover:shadow-lg">
+          <div className="rounded-2xl border border-solace-rocher-100/80 bg-white/85 p-5 shadow-md space-y-3 smooth-fade transition-transform duration-200 ease-out hover:-translate-y-[1px] hover:shadow-lg">
             {/* Placeholder: interactive codeword selector to be implemented */}
             <div
               className="text-sm text-solace-stone-700"
@@ -114,20 +117,20 @@ export default function Page() {
                 Shortcuts
               </p>
               <div className="mt-2 flex flex-wrap gap-2">
-                <a
+                <Link
                   href="timeline"
                   className="inline-flex items-center rounded-full bg-white px-3 py-1 text-xs font-medium shadow-sm transition-all duration-200 hover:-translate-y-[1px] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-solace-ray-500 focus-visible:ring-offset-2 focus-visible:ring-offset-solace-bg"
                   style={{ color: 'var(--solace-stone-800)' }}
                 >
                   View timeline
-                </a>
-                <a
+                </Link>
+                <Link
                   href="settings"
                   className="inline-flex items-center rounded-full bg-solace-rocher-100 px-3 py-1 text-xs font-medium shadow-sm transition-all duration-200 hover:-translate-y-[1px] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-solace-ray-500 focus-visible:ring-offset-2 focus-visible:ring-offset-solace-bg"
                   style={{ color: 'var(--solace-rocher-700)' }}
                 >
                   Sanctuary settings
-                </a>
+                </Link>
               </div>
             </div>
           </div>

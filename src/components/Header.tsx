@@ -14,8 +14,8 @@ export default function Header() {
   ];
 
   return (
-    <header className="w-full py-3 border-b border-solace-rocher-100/50 bg-white/70 backdrop-blur-md supports-[backdrop-filter]:bg-white/60">
-      <div className="app-container flex items-center justify-between">
+    <header className="sticky top-0 z-50 w-full border-b border-solace-rocher-100/70 bg-white/75 backdrop-blur-md supports-[backdrop-filter]:bg-white/60">
+      <div className="shell-container flex items-center justify-between py-3">
         {/* Brand section with refined logo */}
         <Link 
           href="/" 
@@ -23,7 +23,7 @@ export default function Header() {
           aria-label="Ray of Solace - home"
         >
           <div
-            className="flex items-center justify-center w-10 h-10 rounded-xl shadow-sm transition-all duration-300 ease-out group-hover:shadow-md group-hover:-translate-y-0.5 group-active:translate-y-0"
+            className="flex items-center justify-center w-9 h-9 rounded-lg shadow-sm transition-all duration-300 ease-out group-hover:shadow-md group-hover:-translate-y-0.5 group-active:translate-y-0"
             style={{ backgroundColor: 'var(--solace-rocher-100)' }}
             aria-hidden="true"
           >
@@ -37,13 +37,13 @@ export default function Header() {
 
           <div className="flex flex-col">
             <h1
-              className="text-base leading-tight font-serifHeading transition-colors duration-200 group-hover:text-solace-ray-700"
+              className="text-[0.98rem] leading-tight font-serifHeading transition-colors duration-200 group-hover:text-solace-ray-700"
               style={{ fontFamily: 'var(--font-serif-heading)' }}
             >
               Ray of Solace
             </h1>
             <p
-              className="text-xs leading-tight transition-colors duration-200"
+              className="text-[0.68rem] leading-tight transition-colors duration-200"
               style={{ color: 'var(--solace-stone-500)' }}
             >
               a calm place for two
@@ -54,7 +54,7 @@ export default function Header() {
         {/* Navigation with refined styling */}
         <nav
           aria-label="Primary"
-          className="flex items-center gap-1 rounded-2xl bg-white/80 backdrop-blur-sm p-1 shadow-sm border border-solace-stone-100/60"
+          className="flex items-center gap-1 rounded-xl bg-white/85 backdrop-blur-sm p-1 shadow-sm border border-solace-stone-100/70"
         >
           {navItems.map(item => {
             const isActive =
@@ -67,7 +67,7 @@ export default function Header() {
                 key={item.href}
                 href={item.href}
                 className={`
-                  relative px-4 py-2 text-sm font-medium rounded-xl
+                  relative px-3.5 py-1.5 text-sm font-medium rounded-lg
                   transition-all duration-200 ease-out
                   focus-visible:outline-none
                   focus-visible:ring-2 focus-visible:ring-solace-ray-500 focus-visible:ring-offset-2 focus-visible:ring-offset-solace-bg
@@ -87,7 +87,7 @@ export default function Header() {
                 {item.label}
                 {isActive && (
                   <span 
-                    className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-solace-ray-500"
+                    className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-solace-ray-500"
                     aria-hidden="true"
                   />
                 )}
