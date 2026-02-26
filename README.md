@@ -81,14 +81,34 @@ pnpm dev
 
 ### Environment Configuration
 
-The application relies on environment variables for external form handling. Create a .env.local file:
+The application relies on environment variables for external form handling and scheduled emails. Create a `.env.local` file:
 
-```Code snippet
-
+```bash
+# Existing check-in form from HeavinessForm.tsx
 NEXT_PUBLIC_FORMSPREE_FORM_ID=your-form-id
+
+# Special-day scheduled email endpoint (Rachael)
+FORMSPREE_SPECIAL_DAY_ENDPOINT=https://formspree.io/f/xqedwoao
+
+# Secret used by cron calls to /api/cron/special-day-email
+CRON_SECRET=replace-with-a-long-random-value
 ```
 
 This keeps private integration details outside version control.
+
+### Scheduled Special-Day Emails (8:00 AM EAT)
+
+When deployed on Netlify, `netlify/functions/special-day-email-scheduler.ts` runs daily at `05:00 UTC`, which is `08:00 AM EAT (Africa/Nairobi)`.
+
+Flow:
+- Netlify Scheduled Function calls `/api/cron/special-day-email`.
+- The route checks today in `Africa/Nairobi` timezone.
+- It looks up matching entries in `src/data/specialDates.ts`.
+- It sends a formatted email to Formspree only when there is a match.
+
+For security, set `CRON_SECRET` in Netlify environment variables. Netlify also provides `URL` automatically, which the scheduler uses to call your deployed route.
+
+To test on Netlify, open the Functions tab, select `special-day-email-scheduler`, and click **Run now**.
 
 ### Project Structure Philosophy
 
