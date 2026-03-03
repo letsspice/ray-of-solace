@@ -5,6 +5,8 @@ export const runtime = 'nodejs';
 
 const DEFAULT_FORMSPREE_ENDPOINT = 'https://formspree.io/f/xqedwoao';
 const TIMEZONE = 'Africa/Nairobi';
+const ONE_OFF_BELATED_ID = 'belated-mar1-2026';
+const ONE_OFF_BELATED_ALLOWED_DATE = '2026-03-03';
 
 function getNairobiDateInfo(now = new Date()) {
   const formatter = new Intl.DateTimeFormat('en-GB', {
@@ -108,13 +110,54 @@ function isAuthorized(req: NextRequest): boolean {
   return token === secret;
 }
 
+function getSpecialDayEndpoints(): string[] {
+  const list = process.env.FORMSPREE_SPECIAL_DAY_ENDPOINTS;
+  if (list) {
+    const parsed = list
+      .split(',')
+      .map((value) => value.trim())
+      .filter(Boolean);
+
+    if (parsed.length > 0) {
+      return [...new Set(parsed)];
+    }
+  }
+
+  return [process.env.FORMSPREE_SPECIAL_DAY_ENDPOINT ?? DEFAULT_FORMSPREE_ENDPOINT];
+}
+
 export async function GET(req: NextRequest) {
   if (!isAuthorized(req)) {
     return NextResponse.json({ ok: false, error: 'Unauthorized cron call.' }, { status: 401 });
   }
 
   const { key, readable, isoDate } = getNairobiDateInfo();
-  const specialDay = specialDates.find((item) => item.date === key);
+  const requestedKey = req.nextUrl.searchParams.get('overrideDateKey')?.trim();
+  const oneOffId = req.nextUrl.searchParams.get('oneOff')?.trim();
+
+  if (requestedKey && oneOffId !== ONE_OFF_BELATED_ID) {
+    return NextResponse.json(
+      {
+        ok: false,
+        sent: false,
+        error: 'overrideDateKey requires a valid oneOff token.',
+      },
+      { status: 400 },
+    );
+  }
+
+  if (oneOffId === ONE_OFF_BELATED_ID && isoDate !== ONE_OFF_BELATED_ALLOWED_DATE) {
+    return NextResponse.json({
+      ok: true,
+      sent: false,
+      reason: 'One-off window closed.',
+      timezone: TIMEZONE,
+      date: isoDate,
+    });
+  }
+
+  const lookupKey = requestedKey || key;
+  const specialDay = specialDates.find((item) => item.date === lookupKey);
 
   if (!specialDay) {
     return NextResponse.json({
@@ -126,8 +169,7 @@ export async function GET(req: NextRequest) {
     });
   }
 
-  const formspreeEndpoint =
-    process.env.FORMSPREE_SPECIAL_DAY_ENDPOINT ?? DEFAULT_FORMSPREE_ENDPOINT;
+  const formspreeEndpoints = getSpecialDayEndpoints();
 
   const subject = `Rocher → Rachael | ${specialDay.title} (${readable})`;
   const html = buildEmailHtml({
@@ -167,23 +209,31 @@ export async function GET(req: NextRequest) {
     sign_off: 'Your amazing boyfriend and projects partner, Rocher',
   };
 
-  const response = await fetch(formspreeEndpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    body: JSON.stringify(formPayload),
-  });
+  const failures: Array<{ endpoint: string; status: number; details: string }> = [];
 
-  if (!response.ok) {
-    const details = await response.text();
+  for (const endpoint of formspreeEndpoints) {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify(formPayload),
+    });
+
+    if (!response.ok) {
+      const details = await response.text();
+      failures.push({ endpoint, status: response.status, details });
+    }
+  }
+
+  if (failures.length > 0) {
     return NextResponse.json(
       {
         ok: false,
         sent: false,
-        error: `Formspree rejected request: ${response.status}`,
-        details,
+        error: 'One or more Formspree endpoints rejected request.',
+        details: failures,
       },
       { status: 502 },
     );
@@ -193,8 +243,9 @@ export async function GET(req: NextRequest) {
     ok: true,
     sent: true,
     timezone: TIMEZONE,
-    specialDate: key,
+    specialDate: lookupKey,
     specialDayTitle: specialDay.title,
+    recipientsCount: formspreeEndpoints.length,
     deliveredVia: 'Formspree',
   });
 }

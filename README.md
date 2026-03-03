@@ -90,6 +90,10 @@ NEXT_PUBLIC_FORMSPREE_FORM_ID=your-form-id
 # Special-day scheduled email endpoint (Rachael)
 FORMSPREE_SPECIAL_DAY_ENDPOINT=https://formspree.io/f/xqedwoao
 
+# Optional: send the same special-day email to multiple inboxes
+# (example: Rachael form endpoint + Rocher form endpoint)
+FORMSPREE_SPECIAL_DAY_ENDPOINTS=https://formspree.io/f/xqedwoao,https://formspree.io/f/mgedowaj
+
 # Secret used by cron calls to /api/cron/special-day-email
 CRON_SECRET=replace-with-a-long-random-value
 ```
@@ -105,6 +109,7 @@ Flow:
 - The route checks today in `Africa/Nairobi` timezone.
 - It looks up matching entries in `src/data/specialDates.ts`.
 - It sends a formatted email to Formspree only when there is a match.
+- If `FORMSPREE_SPECIAL_DAY_ENDPOINTS` is set, it sends to each endpoint in the list.
 
 For security, set `CRON_SECRET` in Netlify environment variables. Netlify also provides `URL` automatically, which the scheduler uses to call your deployed route.
 

@@ -17,6 +17,18 @@ export interface SpecialDate {
  * Keep messages short, human, and emotionally supportive.
  */
 export const specialDates: SpecialDate[] = [
+  {
+    date: '03-03',
+    title: 'Belated note for March 1 💛',
+    subtitle: 'A little late, still very intentional',
+    message:
+      "Ray - this is a belated March 1 note from me. I missed the exact day, but not the meaning behind it. I appreciate you deeply, and I hope this still lands with warmth today.",
+    intensity: 'supportive',
+    suggestion: 'No pressure today - just receive this as a soft reminder that you are loved and seen.',
+    noteForDesigner:
+      'Designer note - your work and your heart both carry intention, and I admire the way you show up in both.',
+  },
+
   // Deep Support Days
   {
     date: '03-08',
