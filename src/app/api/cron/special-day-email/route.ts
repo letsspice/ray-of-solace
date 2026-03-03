@@ -5,8 +5,6 @@ export const runtime = 'nodejs';
 
 const DEFAULT_FORMSPREE_ENDPOINT = 'https://formspree.io/f/xqedwoao';
 const TIMEZONE = 'Africa/Nairobi';
-const ONE_OFF_BELATED_ID = 'belated-mar1-2026';
-const ONE_OFF_BELATED_ALLOWED_DATE = '2026-03-03';
 
 function getNairobiDateInfo(now = new Date()) {
   const formatter = new Intl.DateTimeFormat('en-GB', {
@@ -132,32 +130,7 @@ export async function GET(req: NextRequest) {
   }
 
   const { key, readable, isoDate } = getNairobiDateInfo();
-  const requestedKey = req.nextUrl.searchParams.get('overrideDateKey')?.trim();
-  const oneOffId = req.nextUrl.searchParams.get('oneOff')?.trim();
-
-  if (requestedKey && oneOffId !== ONE_OFF_BELATED_ID) {
-    return NextResponse.json(
-      {
-        ok: false,
-        sent: false,
-        error: 'overrideDateKey requires a valid oneOff token.',
-      },
-      { status: 400 },
-    );
-  }
-
-  if (oneOffId === ONE_OFF_BELATED_ID && isoDate !== ONE_OFF_BELATED_ALLOWED_DATE) {
-    return NextResponse.json({
-      ok: true,
-      sent: false,
-      reason: 'One-off window closed.',
-      timezone: TIMEZONE,
-      date: isoDate,
-    });
-  }
-
-  const lookupKey = requestedKey || key;
-  const specialDay = specialDates.find((item) => item.date === lookupKey);
+  const specialDay = specialDates.find((item) => item.date === key);
 
   if (!specialDay) {
     return NextResponse.json({
@@ -243,7 +216,7 @@ export async function GET(req: NextRequest) {
     ok: true,
     sent: true,
     timezone: TIMEZONE,
-    specialDate: lookupKey,
+    specialDate: key,
     specialDayTitle: specialDay.title,
     recipientsCount: formspreeEndpoints.length,
     deliveredVia: 'Formspree',
