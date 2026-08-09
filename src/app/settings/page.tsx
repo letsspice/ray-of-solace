@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { AppSettings, updateSettings, loadSettings, applyTheme } from '@/utils/settings';
 import { clearTimeline } from '@/utils/timeline';
 import { CODE_WORDS } from '@/components/CodeWordSelector';
+import SunMark, { phaseForWeight } from '@/components/icons/SunMark';
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState<AppSettings>(() => {
@@ -42,60 +43,57 @@ export default function SettingsPage() {
   }
 
   return (
-    <main className="space-y-6 pb-10 lg:space-y-7">
-      {/* Header Section with Decorative Element */}
-      <section className="relative">
-        <div className="flex items-start justify-between">
+    <main className="space-y-8 pb-12 lg:space-y-10">
+      {/* Header */}
+      <section className="solace-card relative overflow-hidden p-6 md:p-8">
+        <div
+          className="pointer-events-none absolute -right-10 -top-12 opacity-[0.07]"
+          style={{ color: 'var(--solace-ray-700)' }}
+          aria-hidden="true"
+        >
+          <SunMark phase="radiant" size={140} />
+        </div>
+        <div className="relative flex items-start justify-between gap-4">
           <div>
+            <p className="solace-eyebrow mb-1.5">Your sanctuary, your rules</p>
             <h1
-              className="font-serifHeading text-2xl mb-2 tracking-tight"
+              className="font-serifHeading text-3xl tracking-tight md:text-[2rem]"
               style={{ color: 'var(--solace-stone-900)' }}
             >
               Sanctuary controls
             </h1>
-            <p 
-              className="text-sm max-w-md leading-relaxed"
+            <p
+              className="mt-2 max-w-md text-sm leading-relaxed"
               style={{ color: 'var(--solace-stone-600)' }}
             >
               These settings only live on this device. They shape how quietly the
               app responds and what you see.
             </p>
           </div>
-          <div 
-            className="hidden sm:block text-4xl opacity-20"
-            style={{ color: 'var(--solace-ray-500)' }}
-            aria-hidden="true"
-          >
-            𓋴𓃀𓂧𓏏
-          </div>
         </div>
-        <div 
-          className="absolute bottom-0 left-0 w-20 h-0.5 rounded-full"
-          style={{ background: 'var(--solace-ray-300)' }}
-          aria-hidden="true"
-        />
       </section>
 
-      {/* Settings Grid */}
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:gap-6">
+      {/* Settings Grid: single column, then straight to 3 across —
+          skipping a 2-column state avoids an orphaned card next to an empty gap. */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Quiet Confirmations Card */}
-        <section className="group rounded-2xl border border-solace-stone-100/80 bg-white/90 p-5 shadow-md backdrop-blur-sm smooth-fade transition-all duration-300 hover:shadow-lg md:p-6">
+        <section className="solace-card p-6">
           <div className="flex items-start gap-4">
-            <div 
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0"
-              style={{ 
+            <div
+              className="solace-icon-badge"
+              style={{
                 backgroundColor: 'var(--solace-ray-100)',
-                color: 'var(--solace-ray-700)'
+                color: 'var(--solace-ray-700)',
               }}
               aria-hidden="true"
             >
-              𓃀
+              <SunMark phase="soft" size={20} />
             </div>
             <div className="flex-1">
-              <h2 className="text-base font-semibold mb-1" style={{ color: 'var(--solace-stone-900)' }}>
+              <h2 className="mb-1 text-base font-semibold" style={{ color: 'var(--solace-stone-900)' }}>
                 Quiet confirmations
               </h2>
-              <p className="text-xs mb-4 leading-relaxed" style={{ color: 'var(--solace-stone-500)' }}>
+              <p className="mb-4 text-xs leading-relaxed" style={{ color: 'var(--solace-stone-500)' }}>
                 Control whether the app shows the small sent emoji after a
                 heaviness check-in. The note still sends either way.
               </p>
@@ -104,28 +102,28 @@ export default function SettingsPage() {
                 type="button"
                 onClick={toggleConfirmations}
                 className={`
-                  inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium 
-                  border shadow-sm transition-all duration-200 
-                  hover:shadow-md focus-visible:outline-none 
-                  focus-visible:ring-2 focus-visible:ring-solace-ray-500 
+                  inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium
+                  border shadow-sm transition-all duration-200
+                  hover:shadow-md focus-visible:outline-none
+                  focus-visible:ring-2 focus-visible:ring-solace-ray-500
                   focus-visible:ring-offset-2 focus-visible:ring-offset-solace-bg
                   ${settings.showConfirmations ? 'hover:bg-solace-ray-200/50' : 'hover:bg-solace-stone-100/50'}
                 `}
                 style={{
-                  borderColor: settings.showConfirmations 
-                    ? 'var(--solace-ray-300)' 
-                    : 'var(--solace-stone-200)',
-                  backgroundColor: settings.showConfirmations 
-                    ? 'var(--solace-ray-100)' 
+                  borderColor: settings.showConfirmations
+                    ? 'var(--solace-ray-300)'
+                    : 'var(--solace-stone-300)',
+                  backgroundColor: settings.showConfirmations
+                    ? 'var(--solace-ray-100)'
                     : 'white',
                   color: 'var(--solace-stone-900)',
                 }}
               >
-                <span 
+                <span
                   className="w-4 h-4 rounded-full flex items-center justify-center text-xs"
                   style={{
-                    backgroundColor: settings.showConfirmations 
-                      ? 'var(--solace-ray-500)' 
+                    backgroundColor: settings.showConfirmations
+                      ? 'var(--solace-ray-500)'
                       : 'var(--solace-stone-300)',
                     color: 'white'
                   }}
@@ -139,29 +137,29 @@ export default function SettingsPage() {
         </section>
 
         {/* Theme Card */}
-        <section className="group rounded-2xl border border-solace-stone-100/80 bg-white/90 p-5 shadow-md backdrop-blur-sm smooth-fade transition-all duration-300 hover:shadow-lg md:p-6">
+        <section className="solace-card p-6">
           <div className="flex items-start gap-4">
-            <div 
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0"
-              style={{ 
-                backgroundColor: settings.theme === 'day' 
-                  ? 'var(--solace-ray-100)' 
+            <div
+              className="solace-icon-badge text-lg"
+              style={{
+                backgroundColor: settings.theme === 'day'
+                  ? 'var(--solace-ray-100)'
                   : 'var(--solace-rocher-100)',
-                color: settings.theme === 'day' 
-                  ? 'var(--solace-ray-700)' 
-                  : 'var(--solace-rocher-700)'
+                color: settings.theme === 'day'
+                  ? 'var(--solace-ray-700)'
+                  : 'var(--solace-rocher-700)',
               }}
               aria-hidden="true"
             >
               {settings.theme === 'day' ? '☀' : '☾'}
             </div>
             <div className="flex-1">
-              <h2 className="text-base font-semibold mb-1" style={{ color: 'var(--solace-stone-900)' }}>
+              <h2 className="mb-1 text-base font-semibold" style={{ color: 'var(--solace-stone-900)' }}>
                 Visual rhythm
               </h2>
-              <p className="text-xs mb-4 leading-relaxed" style={{ color: 'var(--solace-stone-500)' }}>
-                Switch between a lighter Stone & Light canvas and a deeper night
-                variation.
+              <p className="mb-4 text-xs leading-relaxed" style={{ color: 'var(--solace-stone-500)' }}>
+                Switch between a golden-hour daytime canvas and a deeper,
+                candlelit night variation.
               </p>
 
               <button
@@ -169,14 +167,14 @@ export default function SettingsPage() {
                 onClick={toggleTheme}
                 className="inline-flex items-center gap-3 rounded-full px-4 py-2 text-xs font-medium border shadow-sm transition-all duration-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-solace-ray-500 focus-visible:ring-offset-2 focus-visible:ring-offset-solace-bg"
                 style={{
-                  borderColor: settings.theme === 'day' 
-                    ? 'var(--solace-ray-300)' 
+                  borderColor: settings.theme === 'day'
+                    ? 'var(--solace-ray-300)'
                     : 'var(--solace-rocher-300)',
-                  backgroundColor: settings.theme === 'day' 
-                    ? 'var(--solace-ray-100)' 
+                  backgroundColor: settings.theme === 'day'
+                    ? 'var(--solace-ray-100)'
                     : 'var(--solace-rocher-700)',
-                  color: settings.theme === 'day' 
-                    ? 'var(--solace-stone-900)' 
+                  color: settings.theme === 'day'
+                    ? 'var(--solace-stone-900)'
                     : 'white',
                 }}
               >
@@ -192,23 +190,23 @@ export default function SettingsPage() {
         </section>
 
         {/* Timeline Safety Card */}
-        <section className="group rounded-2xl border border-solace-stone-100/80 bg-white/90 p-5 shadow-md backdrop-blur-sm smooth-fade transition-all duration-300 hover:shadow-lg md:p-6">
+        <section className="solace-card p-6">
           <div className="flex items-start gap-4">
-            <div 
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0"
-              style={{ 
+            <div
+              className="solace-icon-badge text-lg"
+              style={{
                 backgroundColor: 'var(--solace-rocher-100)',
-                color: 'var(--solace-rocher-700)'
+                color: 'var(--solace-rocher-700)',
               }}
               aria-hidden="true"
             >
-              𓋴𓃀𓂧
+              🔒
             </div>
             <div className="flex-1">
-              <h2 className="text-base font-semibold mb-1" style={{ color: 'var(--solace-stone-900)' }}>
+              <h2 className="mb-1 text-base font-semibold" style={{ color: 'var(--solace-stone-900)' }}>
                 Timeline safety
               </h2>
-              <p className="text-xs mb-4 leading-relaxed" style={{ color: 'var(--solace-stone-500)' }}>
+              <p className="mb-4 text-xs leading-relaxed" style={{ color: 'var(--solace-stone-500)' }}>
                 Your timeline is stored only in this browser. You can clear it at
                 any time.
               </p>
@@ -216,7 +214,7 @@ export default function SettingsPage() {
               <button
                 type="button"
                 onClick={handleClearTimeline}
-                className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium border border-solace-rocher-200 bg-white shadow-sm transition-all duration-200 hover:shadow-md hover:border-solace-rocher-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-solace-ray-500 focus-visible:ring-offset-2 focus-visible:ring-offset-solace-bg"
+                className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium border border-solace-rocher-300 bg-white shadow-sm transition-all duration-200 hover:shadow-md hover:border-solace-rocher-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-solace-ray-500 focus-visible:ring-offset-2 focus-visible:ring-offset-solace-bg"
                 style={{
                   color: 'var(--solace-rocher-700)',
                 }}
@@ -229,20 +227,20 @@ export default function SettingsPage() {
         </section>
 
         {/* Code-word Palette Card - Spans Full Width on Desktop */}
-        <section className="rounded-2xl border border-solace-stone-100/80 bg-white/90 p-5 shadow-md backdrop-blur-sm smooth-fade transition-all duration-300 hover:shadow-lg md:col-span-2 md:p-6">
-          <div className="flex items-start gap-4 mb-6">
-            <div 
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0"
-              style={{ 
+        <section className="solace-card p-6 lg:col-span-3">
+          <div className="mb-6 flex items-start gap-4">
+            <div
+              className="solace-icon-badge"
+              style={{
                 backgroundColor: 'var(--solace-ray-100)',
-                color: 'var(--solace-ray-700)'
+                color: 'var(--solace-ray-700)',
               }}
               aria-hidden="true"
             >
-              𓆣
+              <SunMark phase="glowing" size={20} />
             </div>
             <div>
-              <h2 className="text-base font-semibold mb-1" style={{ color: 'var(--solace-stone-900)' }}>
+              <h2 className="mb-1 text-base font-semibold" style={{ color: 'var(--solace-stone-900)' }}>
                 Code-word palette
               </h2>
               <p className="text-xs leading-relaxed" style={{ color: 'var(--solace-stone-500)' }}>
@@ -252,7 +250,7 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {CODE_WORDS.map((cw) => {
               const hidden = settings.hiddenCodewords?.includes(cw.key);
               return (
@@ -263,11 +261,11 @@ export default function SettingsPage() {
                     ${hidden ? 'opacity-60' : 'hover:shadow-md hover:-translate-y-0.5'}
                   `}
                   style={{
-                    borderColor: hidden 
-                      ? 'var(--solace-stone-200)' 
-                      : 'var(--solace-ray-200)',
-                    backgroundColor: hidden 
-                      ? 'var(--solace-stone-50)' 
+                    borderColor: hidden
+                      ? 'var(--solace-stone-300)'
+                      : 'var(--solace-ray-300)',
+                    backgroundColor: hidden
+                      ? 'var(--solace-stone-100)'
                       : 'white',
                   }}
                 >
@@ -278,8 +276,8 @@ export default function SettingsPage() {
                         key={i}
                         className="w-1 h-1 rounded-full"
                         style={{
-                          backgroundColor: i < Math.ceil(cw.weight / 2) 
-                            ? 'var(--solace-ray-500)' 
+                          backgroundColor: i < Math.ceil(cw.weight / 2)
+                            ? 'var(--solace-ray-500)'
                             : 'var(--solace-stone-300)',
                         }}
                       />
@@ -289,10 +287,15 @@ export default function SettingsPage() {
                   <div className="space-y-2">
                     <div>
                       <div className="flex items-center gap-2">
+                        <SunMark
+                          phase={phaseForWeight(cw.weight)}
+                          size={14}
+                          className="opacity-70"
+                        />
                         <span className="text-sm font-serifHeading" style={{ color: 'var(--solace-stone-900)' }}>
                           {cw.label}
                         </span>
-                        <span className="text-xs" style={{ color: 'var(--solace-stone-400)' }}>
+                        <span className="text-xs" style={{ color: 'var(--solace-stone-500)' }}>
                           {cw.weight}
                         </span>
                       </div>
@@ -307,29 +310,29 @@ export default function SettingsPage() {
                       type="button"
                       onClick={() => toggleCodewordVisibility(cw.key)}
                       className={`
-                        w-full mt-2 inline-flex items-center justify-center gap-2 
+                        w-full mt-2 inline-flex items-center justify-center gap-2
                         rounded-full px-3 py-1.5 text-xs font-medium border
                         transition-all duration-200
-                        hover:shadow-sm focus-visible:outline-none 
-                        focus-visible:ring-2 focus-visible:ring-solace-ray-500 
+                        hover:shadow-sm focus-visible:outline-none
+                        focus-visible:ring-2 focus-visible:ring-solace-ray-500
                         focus-visible:ring-offset-2 focus-visible:ring-offset-solace-bg
                       `}
                       style={{
-                        borderColor: hidden 
-                          ? 'var(--solace-stone-300)' 
+                        borderColor: hidden
+                          ? 'var(--solace-stone-300)'
                           : 'var(--solace-ray-300)',
-                        backgroundColor: hidden 
-                          ? 'white' 
+                        backgroundColor: hidden
+                          ? 'white'
                           : 'var(--solace-ray-100)',
-                        color: hidden 
-                          ? 'var(--solace-stone-700)' 
-                          : 'var(--solace-ray-800)',
+                        color: hidden
+                          ? 'var(--solace-stone-700)'
+                          : 'var(--solace-ray-900)',
                       }}
                     >
                       <span className="w-3 h-3 rounded-full flex items-center justify-center text-[8px]"
                         style={{
-                          backgroundColor: hidden 
-                            ? 'var(--solace-stone-400)' 
+                          backgroundColor: hidden
+                            ? 'var(--solace-stone-400)'
                             : 'var(--solace-ray-500)',
                           color: 'white'
                         }}
@@ -344,22 +347,17 @@ export default function SettingsPage() {
             })}
           </div>
 
-          {/* Decorative footer note */}
-          <div 
-            className="mt-6 pt-4 text-center text-[0.6rem] uppercase tracking-wider border-t"
-            style={{ 
-              borderColor: 'var(--solace-stone-200)',
-              color: 'var(--solace-stone-400)'
-            }}
-          >
-            <span aria-hidden="true">𓋴𓃀𓂧𓏏</span> each word holds a weight <span aria-hidden="true">𓆣</span>
+          <div className="solace-divider mt-6 border-t pt-5 text-[0.6rem]" style={{ borderColor: 'var(--solace-stone-100)' }}>
+            <SunMark phase="soft" size={12} />
+            <span className="solace-eyebrow">each word holds a weight</span>
+            <SunMark phase="soft" size={12} />
           </div>
         </section>
       </div>
 
       {/* Footer Note */}
       <footer className="text-center">
-        <p 
+        <p
           className="text-xs"
           style={{ color: 'var(--solace-stone-400)' }}
         >
