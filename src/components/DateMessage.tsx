@@ -2,6 +2,7 @@
 
 import React from 'react';
 import type { SpecialDate } from '../data/specialDates';
+import SunMark, { SunPhase } from './icons/SunMark';
 
 interface Props {
   todayMessage: SpecialDate;
@@ -14,41 +15,42 @@ interface Props {
 export default function DateMessage({ todayMessage }: Props) {
   const { title, subtitle, message, intensity, suggestion, noteForDesigner } = todayMessage;
 
-  // Enhanced intensity mapping with refined color tokens
-  const intensityMap: Record<string, { 
-    bg: string; 
-    text: string; 
-    icon: string;
+  // Every intensity reads from the same sun-mark language, just at a different phase,
+  // so a "heavy" day still feels held rather than alarming.
+  const intensityMap: Record<string, {
+    bg: string;
+    text: string;
+    phase: SunPhase;
     border: string;
     gradient: string;
   }> = {
-    soft: { 
-      bg: 'bg-solace-ray-100/60', 
+    soft: {
+      bg: 'bg-solace-ray-100/60',
       text: 'text-solace-ray-700',
-      icon: '𓆩♡𓆪',
+      phase: 'soft',
       border: 'border-solace-ray-200',
-      gradient: 'from-solace-ray-100/20 to-transparent'
+      gradient: 'from-solace-ray-100/20 to-transparent',
     },
-    supportive: { 
-      bg: 'bg-solace-ray-100/80', 
+    supportive: {
+      bg: 'bg-solace-ray-100/80',
       text: 'text-solace-ray-800',
-      icon: '☾',
+      phase: 'glowing',
       border: 'border-solace-ray-300',
-      gradient: 'from-solace-ray-100/30 to-transparent'
+      gradient: 'from-solace-ray-100/30 to-transparent',
     },
-    celebratory: { 
-      bg: 'bg-solace-ray-300/70', 
+    celebratory: {
+      bg: 'bg-solace-ray-300/70',
       text: 'text-solace-ray-900',
-      icon: '𓋴𓍯𓃭𓂧𓏏𓇼',
+      phase: 'radiant',
       border: 'border-solace-ray-400',
-      gradient: 'from-solace-ray-300/30 to-transparent'
+      gradient: 'from-solace-ray-300/30 to-transparent',
     },
-    heavy: { 
-      bg: 'bg-muted-violet/10', 
-      text: 'text-muted-violet',
-      icon: '𓋴𓃀𓂧𓏏',
-      border: 'border-muted-violet/20',
-      gradient: 'from-muted-violet/5 to-transparent'
+    heavy: {
+      bg: 'bg-solace-ember-300/15',
+      text: 'text-solace-ember-700',
+      phase: 'veiled',
+      border: 'border-solace-ember-300/40',
+      gradient: 'from-solace-ember-300/10 to-transparent',
     },
   };
 
@@ -57,7 +59,7 @@ export default function DateMessage({ todayMessage }: Props) {
   return (
     <section
       aria-labelledby="today-heading"
-      className="relative rounded-2xl bg-white/92 backdrop-blur-sm p-5 shadow-md smooth-fade transition-all duration-300 ease-out hover:shadow-lg border border-solace-stone-100/80 overflow-hidden group md:p-6"
+      className="solace-card group relative overflow-hidden p-5 md:p-6"
     >
       {/* Subtle gradient overlay */}
       <div 
@@ -93,13 +95,10 @@ export default function DateMessage({ todayMessage }: Props) {
         {/* Refined intensity badge */}
         <div className="flex-shrink-0">
           <div
-            className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium ${style.bg} ${style.border} backdrop-blur-sm md:px-4 md:py-1.5 md:text-sm`}
-            style={{ color: style.text }}
+            className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium ${style.bg} ${style.text} ${style.border} backdrop-blur-sm md:px-4 md:py-1.5 md:text-sm`}
             aria-label={`Intensity: ${intensity}`}
           >
-            <span className="font-serifHeading text-base" aria-hidden="true">
-              {style.icon}
-            </span>
+            <SunMark phase={style.phase} size={15} />
             <span className="capitalize tracking-wide">{intensity}</span>
           </div>
         </div>
@@ -116,9 +115,9 @@ export default function DateMessage({ todayMessage }: Props) {
 
         {/* Designer note with refined styling */}
         {noteForDesigner && (
-          <blockquote 
+          <blockquote
             className="relative pl-5 py-1"
-            style={{ borderLeft: `2px solid var(--solace-rocher-200)` }}
+            style={{ borderLeft: `2px solid var(--solace-rocher-300)` }}
           >
             <p 
               className="text-sm italic font-light"
@@ -132,14 +131,14 @@ export default function DateMessage({ todayMessage }: Props) {
         {/* Suggestion with gentle emphasis */}
         {suggestion && (
           <div className="flex items-start gap-2 pt-2">
-            <span 
-              className="text-xs mt-0.5" 
-              style={{ color: 'var(--solace-ray-600)' }}
+            <span
+              className="mt-0.5"
+              style={{ color: 'var(--solace-ray-700)' }}
               aria-hidden="true"
             >
-              𓃀
+              <SunMark phase="soft" size={14} />
             </span>
-            <p 
+            <p
               className="text-sm font-medium"
               style={{ color: 'var(--solace-stone-600)' }}
             >

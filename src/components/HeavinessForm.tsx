@@ -140,9 +140,9 @@ export default function HeavinessForm() {
   };
 
   return (
-    <form 
-      onSubmit={handleSubmit} 
-      className="space-y-5 rounded-2xl border border-solace-stone-100/80 bg-white/92 p-5 shadow-sm smooth-fade md:p-6"
+    <form
+      onSubmit={handleSubmit}
+      className="solace-card space-y-5 p-5 md:p-6"
       aria-label="Heaviness check-in form"
     >
       {/* Score Section with Visual Indicator */}
@@ -311,8 +311,8 @@ export default function HeavinessForm() {
           
           {status === 'error' && (
             <div className="flex items-center gap-2" role="alert">
-              <span className="text-lg" style={{ color: 'var(--muted-violet)' }}>🕯️</span>
-              <span className="text-sm" style={{ color: 'var(--muted-violet)' }}>
+              <span className="text-lg" style={{ color: 'var(--solace-ember-700)' }}>🕯️</span>
+              <span className="text-sm" style={{ color: 'var(--solace-ember-700)' }}>
                 {errorMessage ?? 'Try again gently'}
               </span>
             </div>
