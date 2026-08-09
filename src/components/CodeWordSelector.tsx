@@ -2,20 +2,11 @@
 
 import React, { KeyboardEvent, useState } from 'react';
 import { loadSettings } from '../utils/settings';
+import SunMark, { phaseForWeight } from './icons/SunMark';
+import { CodeWord, CODE_WORDS } from '../data/codeWords';
 
-export type CodeWord = {
-  key: string;
-  label: string;
-  weight: number; // 1 - 10
-  description?: string;
-};
-
-export const CODE_WORDS: CodeWord[] = [
-  { key: 'moss', label: 'Moss', weight: 2, description: 'soft, resting' },
-  { key: 'velvet', label: 'Velvet', weight: 4, description: 'soft and quiet' },
-  { key: 'turtle', label: 'Turtle', weight: 7, description: 'pulling into shell' },
-  { key: 'nebula', label: 'Nebula', weight: 9, description: 'clouded, distant' },
-];
+export type { CodeWord };
+export { CODE_WORDS };
 
 interface Props {
   selected?: string | null;
@@ -39,14 +30,6 @@ export default function CodeWordSelector({ selected = null, onChange }: Props) {
       onChange?.(cw);
     }
   }
-
-  // Get weight symbol based on value
-  const getWeightSymbol = (weight: number): string => {
-    if (weight <= 3) return "𓆉";
-    if (weight <= 6) return "𓃠";
-    if (weight <= 8) return "𓆣";
-    return "𓃀";
-  };
 
   return (
     <div className="grid grid-cols-2 gap-3">
@@ -78,11 +61,12 @@ export default function CodeWordSelector({ selected = null, onChange }: Props) {
             aria-label={`${cw.label}: weight ${cw.weight} — ${cw.description}`}
           >
             {/* Decorative corner accent */}
-            <span 
-              className="absolute top-2 right-2 text-xs opacity-30 group-hover:opacity-60 transition-opacity"
+            <span
+              className="absolute top-2 right-2 opacity-30 transition-opacity group-hover:opacity-60"
+              style={{ color: 'var(--solace-ray-700)' }}
               aria-hidden="true"
             >
-              {getWeightSymbol(cw.weight)}
+              <SunMark phase={phaseForWeight(cw.weight)} size={16} />
             </span>
 
             <div className="space-y-2">
