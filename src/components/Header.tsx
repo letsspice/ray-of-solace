@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import SunMark from './icons/SunMark';
 
 export default function Header() {
   const pathname = usePathname();
@@ -14,25 +15,22 @@ export default function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-solace-rocher-100/70 bg-white/75 backdrop-blur-md supports-[backdrop-filter]:bg-white/60">
-      <div className="shell-container flex items-center justify-between py-3">
-        {/* Brand section with refined logo */}
-        <Link 
-          href="/" 
-          className="flex items-center gap-3 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-solace-ray-500 focus-visible:ring-offset-2 focus-visible:ring-offset-solace-bg rounded-lg"
+    <header className="sticky top-0 z-50 w-full border-b border-solace-ray-300/30 bg-white/75 backdrop-blur-md supports-[backdrop-filter]:bg-white/60">
+      <div className="shell-container flex flex-col gap-3 py-3 sm:flex-row sm:items-center sm:justify-between">
+        {/* Brand section */}
+        <Link
+          href="/"
+          className="group flex items-center gap-3 self-start rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-solace-ray-500 focus-visible:ring-offset-2 focus-visible:ring-offset-solace-bg"
           aria-label="Ray of Solace - home"
         >
           <div
-            className="flex items-center justify-center w-9 h-9 rounded-lg shadow-sm transition-all duration-300 ease-out group-hover:shadow-md group-hover:-translate-y-0.5 group-active:translate-y-0"
-            style={{ backgroundColor: 'var(--solace-rocher-100)' }}
-            aria-hidden="true"
+            className="flex h-9 w-9 items-center justify-center rounded-xl shadow-sm transition-all duration-300 ease-out group-hover:-translate-y-0.5 group-hover:shadow-md group-active:translate-y-0"
+            style={{
+              background: 'linear-gradient(145deg, var(--solace-ray-300), var(--solace-ray-500))',
+              color: 'var(--solace-ray-900)',
+            }}
           >
-            <span
-              className="text-sm font-medium tracking-wide transition-transform duration-300 group-hover:scale-110"
-              style={{ color: 'var(--solace-rocher-700)' }}
-            >
-              𓂀
-            </span>
+            <SunMark phase="radiant" size={18} title="Ray of Solace" />
           </div>
 
           <div className="flex flex-col">
@@ -46,15 +44,15 @@ export default function Header() {
               className="text-[0.68rem] leading-tight transition-colors duration-200"
               style={{ color: 'var(--solace-stone-500)' }}
             >
-              a calm place for two
+              a warm little sanctuary, just for two
             </p>
           </div>
         </Link>
 
-        {/* Navigation with refined styling */}
+        {/* Navigation */}
         <nav
           aria-label="Primary"
-          className="flex items-center gap-1 rounded-xl bg-white/85 backdrop-blur-sm p-1 shadow-sm border border-solace-stone-100/70"
+          className="flex items-center gap-1 self-stretch rounded-xl border border-solace-stone-100/70 bg-white/85 p-1 shadow-sm backdrop-blur-sm sm:self-auto"
         >
           {navItems.map(item => {
             const isActive =
@@ -67,27 +65,27 @@ export default function Header() {
                 key={item.href}
                 href={item.href}
                 className={`
-                  relative px-3.5 py-1.5 text-sm font-medium rounded-lg
-                  transition-all duration-200 ease-out
+                  relative flex-1 rounded-lg px-3.5 py-1.5 text-center text-sm font-medium
+                  transition-all duration-200 ease-out sm:flex-none
                   focus-visible:outline-none
                   focus-visible:ring-2 focus-visible:ring-solace-ray-500 focus-visible:ring-offset-2 focus-visible:ring-offset-solace-bg
                   ${
                     isActive
-                      ? 'bg-white shadow-sm'
+                      ? 'bg-solace-ray-100 shadow-sm'
                       : 'hover:bg-white/70 hover:shadow-sm active:bg-white/90'
                   }
                 `}
                 style={{
                   color: isActive
-                    ? 'var(--solace-stone-900)'
+                    ? 'var(--solace-ray-900)'
                     : 'var(--solace-stone-600)',
                 }}
                 aria-current={isActive ? 'page' : undefined}
               >
                 {item.label}
                 {isActive && (
-                  <span 
-                    className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-solace-ray-500"
+                  <span
+                    className="absolute bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-solace-ray-500"
                     aria-hidden="true"
                   />
                 )}
