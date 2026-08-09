@@ -2,120 +2,151 @@ import React from 'react';
 import Link from 'next/link';
 import DateMessage from '../components/DateMessage';
 import HeavinessForm from '../components/HeavinessForm';
+import SunMark, { phaseForWeight } from '../components/icons/SunMark';
 import { getTodayMessage } from '../utils/getTodayMessage';
+import { CODE_WORDS } from '../data/codeWords';
 
-/**
- * The main entry page — the initial screen users see.
- * Layout:
- *  - Mobile: stacked (DateMessage -> HeavinessForm -> Codewords area)
- *  - md: two-column with form and codewords beside the message
- *
- * For now, CodeWords UI is represented as a placeholder area (we'll add an interactive version later).
- */
+function greetingForHour(hour: number): string {
+  if (hour < 5) return 'Still up, Ray?';
+  if (hour < 12) return 'Good morning, Ray';
+  if (hour < 17) return 'Good afternoon, Ray';
+  if (hour < 21) return 'Good evening, Ray';
+  return 'Winding down, Ray?';
+}
 
 export default function Page() {
   const todayMessage = getTodayMessage();
+  const now = new Date();
+  const greeting = greetingForHour(now.getHours());
+  const formattedDate = now.toLocaleDateString(undefined, {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+  });
 
   return (
-    <div className="space-y-6 lg:space-y-8">
-      <section className="rounded-2xl border border-solace-stone-100/80 bg-white/65 p-4 shadow-sm backdrop-blur-sm lg:p-5">
-        <DateMessage todayMessage={todayMessage} />
+    <div className="space-y-8 lg:space-y-10">
+      {/* Warm welcome hero */}
+      <section className="solace-card relative overflow-hidden p-6 md:p-9">
+        <div
+          className="pointer-events-none absolute -right-14 -top-16 h-56 w-56 rounded-full opacity-50 blur-3xl"
+          style={{ background: 'radial-gradient(circle, var(--solace-ray-300), transparent 70%)' }}
+          aria-hidden="true"
+        />
+        <div
+          className="pointer-events-none absolute -bottom-16 left-1/3 h-40 w-40 rounded-full opacity-30 blur-3xl"
+          style={{ background: 'radial-gradient(circle, var(--solace-rocher-300), transparent 70%)' }}
+          aria-hidden="true"
+        />
+        <div className="relative flex flex-col items-start gap-5 sm:flex-row sm:items-center">
+          <div
+            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl shadow-sm md:h-16 md:w-16"
+            style={{
+              background: 'linear-gradient(145deg, var(--solace-ray-300), var(--solace-ray-500))',
+              color: 'var(--solace-ray-900)',
+            }}
+            aria-hidden="true"
+          >
+            <SunMark phase="radiant" size={30} />
+          </div>
+          <div>
+            <p className="solace-eyebrow">{formattedDate}</p>
+            <h1
+              className="font-serifHeading text-3xl leading-tight tracking-tight md:text-[2.1rem]"
+              style={{ color: 'var(--solace-stone-900)' }}
+            >
+              {greeting}
+            </h1>
+            <p className="mt-1.5 max-w-md text-sm leading-relaxed" style={{ color: 'var(--solace-stone-500)' }}>
+              This little corner is always here, however you arrive today.
+            </p>
+          </div>
+        </div>
       </section>
+
+      <DateMessage todayMessage={todayMessage} />
 
       <section
         aria-labelledby="checkin-heading"
-        className="grid gap-5 lg:gap-6 xl:grid-cols-[minmax(0,1.28fr)_minmax(0,1fr)] items-start"
+        className="grid items-stretch gap-6 lg:gap-8 xl:grid-cols-[minmax(0,1.28fr)_minmax(0,1fr)]"
       >
-        <div>
+        <div className="flex flex-col">
           <h3
             id="checkin-heading"
-            className="text-sm font-semibold mb-1 tracking-tight uppercase tracking-[0.12em] text-[0.7rem]"
-            style={{ color: 'var(--solace-stone-900)' }}
+            className="solace-eyebrow mb-1.5"
           >
             Today&apos;s check-in
           </h3>
-          <p
-            className="text-xs mb-3"
-            style={{ color: 'var(--solace-stone-500)' }}
-          >
+          <p className="mb-4 text-xs" style={{ color: 'var(--solace-stone-500)' }}>
             A single, quiet moment to say how you&apos;re doing.
           </p>
-          <div className="rounded-2xl border border-solace-rocher-100/80 bg-white/85 p-5 shadow-md smooth-fade transition-transform duration-200 ease-out hover:-translate-y-[1px] hover:shadow-lg">
-            <HeavinessForm />
-          </div>
+          <HeavinessForm />
         </div>
 
-        <aside>
-          <h4
-            className="text-sm font-semibold mb-1 tracking-tight uppercase tracking-[0.12em] text-[0.7rem]"
-            style={{ color: 'var(--solace-stone-900)' }}
-          >
+        <aside className="flex flex-col">
+          <h4 className="solace-eyebrow mb-1.5">
             Code-words & small signals
           </h4>
-          <p
-            className="text-xs mb-3"
-            style={{ color: 'var(--solace-stone-500)' }}
-          >
-            A shorthand for how close or far you feel, without
-            needing to explain everything.
+          <p className="mb-4 text-xs" style={{ color: 'var(--solace-stone-500)' }}>
+            A shorthand for how close or far you feel, without needing to
+            explain everything.
           </p>
 
-          <div className="rounded-2xl border border-solace-rocher-100/80 bg-white/85 p-5 shadow-md space-y-3 smooth-fade transition-transform duration-200 ease-out hover:-translate-y-[1px] hover:shadow-lg">
-            {/* Placeholder: interactive codeword selector to be implemented */}
-            <div
-              className="text-sm text-solace-stone-700"
-              style={{ color: 'var(--solace-stone-700)' }}
-            >
-              <div className="text-sm">
-                <p>Choose a code-word to send:</p>
+          <div className="solace-card flex flex-1 flex-col gap-5 p-6">
+            <div>
+              <p className="text-sm" style={{ color: 'var(--solace-stone-700)' }}>
+                Choose a code-word in the check-in form to send it quietly:
+              </p>
+              <div className="mt-3 grid grid-cols-2 gap-3">
+                {CODE_WORDS.map((cw) => (
+                  <div
+                    key={cw.key}
+                    className="rounded-xl border p-3"
+                    style={{ borderColor: 'var(--solace-stone-300)', backgroundColor: 'white' }}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span className="opacity-70" style={{ color: 'var(--solace-ray-700)' }}>
+                        <SunMark phase={phaseForWeight(cw.weight)} size={13} />
+                      </span>
+                      <span className="text-sm font-serifHeading" style={{ color: 'var(--solace-stone-900)' }}>
+                        {cw.label}
+                      </span>
+                    </div>
+                    <p className="mt-1 text-xs" style={{ color: 'var(--solace-stone-500)' }}>
+                      {cw.description}
+                    </p>
+                    <div className="mt-2 flex gap-0.5">
+                      {Array.from({ length: 10 }).map((_, i) => (
+                        <span
+                          key={i}
+                          className="h-1 flex-1 rounded-full"
+                          style={{
+                            backgroundColor: i < cw.weight ? 'var(--solace-ray-500)' : 'var(--solace-stone-300)',
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </div>
-              <ul className="mt-2 space-y-1 text-xs">
-                <li>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-solace-rocher-100/80 px-2 py-0.5">
-                    <span className="font-medium">Moss</span>
-                    <span className="text-[0.7rem]" style={{ color: 'var(--solace-stone-600)' }}>
-                      soft, resting
-                    </span>
-                  </span>
-                </li>
-                <li>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-solace-rocher-100/80 px-2 py-0.5">
-                    <span className="font-medium">Velvet</span>
-                    <span className="text-[0.7rem]" style={{ color: 'var(--solace-stone-600)' }}>
-                      soft and quiet
-                    </span>
-                  </span>
-                </li>
-                <li>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-solace-rocher-100/80 px-2 py-0.5">
-                    <span className="font-medium">Turtle</span>
-                    <span className="text-[0.7rem]" style={{ color: 'var(--solace-stone-600)' }}>
-                      pulling into shell
-                    </span>
-                  </span>
-                </li>
-                <li>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-solace-rocher-100/80 px-2 py-0.5">
-                    <span className="font-medium">Nebula</span>
-                    <span className="text-[0.7rem]" style={{ color: 'var(--solace-stone-600)' }}>
-                      clouded, distant
-                    </span>
-                  </span>
-                </li>
-              </ul>
-              <p className="mt-2 text-xs text-solace-stone-500">
-                (The picker on the left uses these, this space is a
-                little legend.)
+            </div>
+
+            <div
+              className="rounded-xl p-4 text-sm leading-relaxed"
+              style={{ backgroundColor: 'var(--solace-ray-100)', color: 'var(--solace-ray-900)' }}
+            >
+              <SunMark phase="soft" size={13} className="mb-1 inline-block" />
+              <p>
+                There&apos;s no wrong code-word to send. Even a quiet one still
+                reaches me, and I&apos;ll meet you wherever you are.
               </p>
             </div>
 
             <div
-              className="mt-3 border-t border-solace-stone-100 pt-3 text-xs text-solace-stone-500"
-              style={{ color: 'var(--solace-stone-500)' }}
+              className="mt-auto border-t pt-3 text-xs"
+              style={{ borderColor: 'var(--solace-stone-100)', color: 'var(--solace-stone-500)' }}
             >
-              <p>
-                Shortcuts
-              </p>
+              <p>Shortcuts</p>
               <div className="mt-2 flex flex-wrap gap-2">
                 <Link
                   href="timeline"
@@ -136,6 +167,14 @@ export default function Page() {
           </div>
         </aside>
       </section>
+
+      <div className="solace-divider pb-2 pt-2 text-xs">
+        <SunMark phase="soft" size={14} />
+        <span className="solace-eyebrow" style={{ color: 'var(--solace-ray-700)' }}>
+          a quiet place, always here
+        </span>
+        <SunMark phase="soft" size={14} />
+      </div>
     </div>
   );
 }
