@@ -4,38 +4,54 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap");
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* Tailwind v4 ignores tailwind.config.ts unless it's referenced explicitly —
+ * without this, every "solace-*" color/font utility silently resolves to nothing. */
+@config "../../tailwind.config.ts";
+
+/* Belt-and-suspenders explicit sources, since auto-detection has proven unreliable
+ * with this Turbopack + pnpm workspace setup — without it, most utility classes in
+ * src/app and src/components were being dropped from the compiled CSS. */
+@source "../app/**/*.{ts,tsx}";
+@source "../components/**/*.{ts,tsx}";
 
 :root {
   /* Core Stone & Light surface */
-  --solace-bg: #f9f8f6;
+  --solace-bg: #fdf9f2;
 
   /* Stone – calm neutral text and surfaces */
-  --solace-stone-100: #f5f5f4;
-  --solace-stone-300: #d6d3d1;
-  --solace-stone-500: #78716c;
-  --solace-stone-700: #44403c;
-  --solace-stone-900: #1c1917;
+  --solace-stone-100: #f6f3ee;
+  --solace-stone-300: #ddd4c8;
+  --solace-stone-500: #8a7d6d;
+  --solace-stone-700: #4a3f34;
+  --solace-stone-900: #241d16;
 
-  /* Ray – warm, gentle highlight */
-  --solace-ray-100: #fef9c3;
-  --solace-ray-300: #fde68a;
-  --solace-ray-500: #eab308;
-  --solace-ray-700: #a16207;
-  --solace-ray-900: #713f12;
+  /* Ray – warm, golden-hour highlight */
+  --solace-ray-100: #fdf0cc;
+  --solace-ray-300: #f9d986;
+  --solace-ray-500: #e3a021;
+  --solace-ray-700: #a3620f;
+  --solace-ray-900: #6b3d09;
 
   /* Rocher – deeper, grounded neutrals for structure */
-  --solace-rocher-100: #f5f1eb;
-  --solace-rocher-300: #d3bca7;
-  --solace-rocher-500: #a47a5e;
-  --solace-rocher-700: #6c4a3c;
-  --solace-rocher-900: #3e2723;
+  --solace-rocher-100: #f7efe6;
+  --solace-rocher-300: #dcbfa4;
+  --solace-rocher-500: #a97a56;
+  --solace-rocher-700: #6f4a34;
+  --solace-rocher-900: #3b271c;
 
-  /* Supportive tones for quieter emotional cues */
+  /* Ember – a warm, resting tone for heavier moments; stays in-family, never alarming */
+  --solace-ember-300: #e3b3a0;
+  --solace-ember-500: #bd6f56;
+  --solace-ember-700: #834938;
+
+  /* Soft supportive accent, used sparingly for quiet contrast */
   --soft-teal: #5fb3b3;
-  --muted-violet: #8b7aae;
+
+  /* Shared warm shadow used by cards, so depth reads as candlelight, not generic UI. */
+  --solace-shadow: 0 1px 2px rgba(107, 61, 9, 0.04), 0 8px 24px -12px rgba(107, 61, 9, 0.18);
+  --solace-shadow-lg: 0 4px 10px rgba(107, 61, 9, 0.06), 0 20px 40px -16px rgba(107, 61, 9, 0.24);
 
   /* Font variables align with Tailwind's fontFamily tokens. */
   --font-ui: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -43,22 +59,27 @@
   --font-serif-heading: "Instrument Serif", "Merriweather", Georgia, serif;
 }
 
-/* Night variation: keeps the same emotional language but deepens the canvas. */
+/* Night variation: keeps the same emotional language but deepens the canvas into candlelight. */
 :root[data-theme="night"] {
-  --solace-bg: #020617;
-  --solace-stone-100: #1f2937;
-  --solace-stone-300: #4b5563;
-  --solace-stone-500: #9ca3af;
-  --solace-stone-700: #e5e7eb;
-  --solace-stone-900: #f9fafb;
+  --solace-bg: #1a1410;
+  --solace-stone-100: #2b2219;
+  --solace-stone-300: #55483a;
+  --solace-stone-500: #b3a08a;
+  --solace-stone-700: #ece2d4;
+  --solace-stone-900: #fbf3e8;
 
-  --solace-rocher-100: #111827;
-  --solace-rocher-300: #1f2937;
-  --solace-rocher-500: #374151;
-  --solace-rocher-700: #4b5563;
-  --solace-rocher-900: #020617;
+  --solace-rocher-100: #241c15;
+  --solace-rocher-300: #4a3a2c;
+  --solace-rocher-500: #7a5c42;
+  --solace-rocher-700: #b3906a;
+  --solace-rocher-900: #f2e0c8;
 
-  --muted-violet: #a78bfa;
+  --solace-ember-300: #6e4438;
+  --solace-ember-500: #b0705a;
+  --solace-ember-700: #e3b3a0;
+
+  --solace-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 8px 24px -12px rgba(0, 0, 0, 0.45);
+  --solace-shadow-lg: 0 4px 10px rgba(0, 0, 0, 0.3), 0 20px 40px -16px rgba(0, 0, 0, 0.55);
 }
 
 html {
@@ -68,16 +89,23 @@ html {
 
 body {
   font-family: var(--font-ui);
-  /* Soft Stone & Light canvas with a gentle warm glow at the top. */
+  /* A golden-hour glow drifting in from one corner, like late sun through a window. */
   background-color: var(--solace-bg);
   background-image:
-    radial-gradient(circle at 0 0, rgba(254, 249, 195, 0.62), transparent 55%),
-    radial-gradient(circle at 100% 0, rgba(245, 241, 235, 0.9), transparent 55%),
-    radial-gradient(circle at 50% 100%, rgba(245, 241, 235, 0.55), transparent 60%);
+    radial-gradient(circle at 8% -10%, rgba(227, 160, 33, 0.16), transparent 50%),
+    radial-gradient(circle at 100% 0%, rgba(247, 239, 230, 0.95), transparent 55%),
+    radial-gradient(circle at 60% 100%, rgba(220, 191, 164, 0.22), transparent 60%);
   color: var(--solace-stone-900);
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
   background-attachment: fixed;
+}
+
+:root[data-theme="night"] body {
+  background-image:
+    radial-gradient(circle at 8% -10%, rgba(227, 160, 33, 0.1), transparent 50%),
+    radial-gradient(circle at 100% 0%, rgba(43, 34, 25, 0.7), transparent 55%),
+    radial-gradient(circle at 60% 100%, rgba(74, 58, 44, 0.35), transparent 60%);
 }
 
 /* Layout helper: centered column with breathing room, used by the main app shell. */
@@ -131,6 +159,54 @@ body {
 .smooth-fade {
   /* Gentle motion for entering cards or focusable elements. */
   transition: opacity 0.28s ease, transform 0.28s ease;
+}
+
+/* Shared card surface: used across Home, Timeline, and Settings so the whole
+ * app reads as one warm, candlelit material instead of many one-off boxes. */
+.solace-card {
+  border-radius: 1.25rem;
+  border: 1px solid var(--solace-stone-100);
+  background-color: color-mix(in srgb, white 90%, transparent);
+  box-shadow: var(--solace-shadow);
+  backdrop-filter: blur(6px);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+:root[data-theme="night"] .solace-card {
+  background-color: color-mix(in srgb, var(--solace-rocher-100) 88%, transparent);
+}
+
+.solace-card:hover {
+  box-shadow: var(--solace-shadow-lg);
+}
+
+/* Small square icon badge, used for every feature icon in place of the old hieroglyph glyphs. */
+.solace-icon-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.85rem;
+  flex-shrink: 0;
+}
+
+.solace-eyebrow {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--solace-stone-500);
+}
+
+/* A quiet sun-mark divider used at the foot of pages instead of hieroglyph strings. */
+.solace-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--solace-ray-500);
+  opacity: 0.55;
 }
 
 /* Accessible focus style: rely on :focus-visible so pointer users aren't overwhelmed. */

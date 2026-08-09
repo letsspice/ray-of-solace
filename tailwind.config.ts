@@ -38,41 +38,47 @@ const config: Config = {
         // `solace` scopes app-specific colors so semantic utilities remain coherent.
         solace: {
           // Primary page background – soft and warm to keep the canvas calm.
-          bg: '#F9F8F6',
+          bg: '#FDF9F2',
 
           // Grounding neutral scale. 500–900 for text, 100–300 for borders and subtle fills.
           stone: {
-            100: '#F5F5F4',
-            300: '#D6D3D1',
-            500: '#78716C', // mid reference for most body text on light backgrounds
-            700: '#44403C',
-            900: '#1C1917',
+            100: '#F6F3EE',
+            300: '#DDD4C8',
+            500: '#8A7D6D',
+            700: '#4A3F34',
+            900: '#241D16',
           },
 
-          // "Ray" is the gentle highlight/accent. Use 100–300 for fills, 500 for key accents,
-          // and 700+ very sparingly for strong emphasis or critical focus states.
+          // "Ray" is the gentle golden-hour highlight/accent. Use 100–300 for fills, 500 for
+          // key accents, and 700+ very sparingly for strong emphasis or critical focus states.
           ray: {
-            100: '#FEF9C3',
-            300: '#FDE68A',
-            500: '#EAB308',
-            700: '#A16207',
-            900: '#713F12',
+            100: '#FDF0CC',
+            300: '#F9D986',
+            500: '#E3A021',
+            700: '#A3620F',
+            900: '#6B3D09',
           },
 
           // Rocher is a deep, earthy neutral for grounded elements (cards, headers, rails)
           // when you need more weight than stone but still want warmth.
           rocher: {
-            100: '#F5F1EB',
-            300: '#D3BCA7',
-            500: '#A47A5E',
-            700: '#6C4A3C',
-            900: '#3E2723',
+            100: '#F7EFE6',
+            300: '#DCBFA4',
+            500: '#A97A56',
+            700: '#6F4A34',
+            900: '#3B271C',
           },
 
-          // Supportive hues for subtle states, tags, or mood hints.
-          // Keep them as accents so the primary Stone & Ray relationship stays dominant.
+          // Ember carries the weight of heavier moments while staying inside the warm
+          // family — a resting, held feeling rather than an alarming one.
+          ember: {
+            300: '#E3B3A0',
+            500: '#BD6F56',
+            700: '#834938',
+          },
+
+          // Supportive accent used sparingly for quiet contrast.
           softTeal: '#5FB3B3',
-          mutedViolet: '#8B7AAE',
         },
       },
     },
